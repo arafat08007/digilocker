@@ -48,7 +48,7 @@ class LoginPage extends StatelessWidget {
                   Text('Access & Share your documents anytime anywhere  ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: kPrimaryColor.withOpacity(0.7))),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
 
-                  Text('Login', style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: kPrimaryColor)),
+                  Text('Login', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kPrimaryColor)),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   RoundedInputField(
                     icon: Icons.person,
@@ -76,10 +76,11 @@ class LoginPage extends StatelessWidget {
                       var userid= _userIdCntrl.text.toString().trim();
                       var uesrpass = _userPassCntrl.text.toString().trim();
                       if(userid.toLowerCase()=='admin'.toLowerCase() && uesrpass.toLowerCase()=='admin'.toLowerCase()) {
-                        showSnackMessage(context, "Login in , please wait...", _globalscaffoldKey);
-                        Get.to(HomePage());
+                        showSnackMessage(context, "Login in , please wait...", _globalscaffoldKey,'');
+                     //   Get.to(HomePage());
+                        Get.to(() => HomePage());
                       }
-                      else showSnackMessage(context, "Login credential mismatch! Try again.", _globalscaffoldKey);;
+                      else showSnackMessage(context, "Login credential mismatch! Try again.", _globalscaffoldKey,'red');
                     },
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
@@ -90,7 +91,7 @@ class LoginPage extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  Image.asset('assets/govt_logo.png'),
+                  Expanded(child: Image.asset('assets/govt_logo.png')),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                   //Image.asset('assets/orange_logo.png'),
 

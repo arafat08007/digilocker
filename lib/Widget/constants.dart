@@ -10,9 +10,9 @@ const kPrimaryLightColor = Color(0xFFe7f3f7);
 
 const loginPagebgColor = Color (0xFFE7E6E7);
 
-void showSnackMessage(BuildContext context, String s, GlobalKey<ScaffoldState> scaffoldKey) {
+void showSnackMessage(BuildContext context, String s, GlobalKey<ScaffoldState> scaffoldKey,String type) {
   final snackBar = SnackBar(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: type.isEmpty?kPrimaryColor:Colors.red,
       content: Text(s.toString(), textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontWeight:FontWeight.normal, fontSize: 12),)
   );
   scaffoldKey.currentState.showSnackBar(snackBar);   // edited line
@@ -23,6 +23,16 @@ Future<void> createFolder(BuildContext context, GlobalKey<ScaffoldState> scaffol
   print('app doc dir'+ _appDocDir.toString());
   final Directory _appDocDirFolder = Directory('${_appDocDir.path}/$s/');
   print('created dir \t $_appDocDirFolder');
+  if(await _appDocDirFolder.exists()){ //if folder already exists return path
+    print('Folder already exist');
+    showSnackMessage(context, "Folder already exist.", scaffoldKey,'red');
+    return _appDocDirFolder.path;
+
+  }else{//if folder not exists create folder and then return its path
+    showSnackMessage(context, "Folder Created.", scaffoldKey,'');
+    final Directory _appDocDirNewFolder=await _appDocDirFolder.create(recursive: true);
+    return _appDocDirNewFolder.path;
+  }
 
 }
 
@@ -51,7 +61,7 @@ fileImage(String filename){
   }
   else if(filename.toLowerCase() == 'folder'){
     print(filename);
-    return Icon(Icons.folder_open_outlined, color: Colors.black54);
+    return Icon(Icons.folder_open_outlined, color: Colors.black54, size: 16,);
   }
   else{
     return Icon(Icons.wysiwyg_rounded, color: Colors.red,);

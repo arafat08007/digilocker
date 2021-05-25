@@ -74,18 +74,24 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void initState() {
     // TODO: implement initState
   //  _controller.addListener(() => _extension = _controller.text);
+    _getStorgeInfo();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 260),
+      duration: Duration(milliseconds: 300),
     );
 
     final curvedAnimation = CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
   //  initDiskSpace();
-    _getStorgeInfo();
+
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
   void _onItemTapped(int index) async{
     setState(() {
       if(index == 0){
@@ -151,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               title: Text('Create folder'),
               onTap: () {
                 // Get.back();
-
+                _showMyDialog();
               },
             ),
 
@@ -235,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           IconButton(
             onPressed: (){
               print("Sync started");
-              showSnackMessage(context,"Sync Started please wait...", scaffoldKey);
+              showSnackMessage(context,"Sync Started please wait...", scaffoldKey,'');
             },
             icon: Icon(
             Icons.sync,

@@ -1,7 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:googledriveclone_flutter/Data/Files.dart';
-import 'package:googledriveclone_flutter/Screen/Home.dart';
-import 'package:googledriveclone_flutter/Widget/recent.dart';
+import 'dart:io';
+
+import 'package:flutter/widgets.dart';
+import 'package:flutter_file_manager/flutter_file_manager.dart';
+import 'package:googledriveclone_flutter/Models/Files.dart';
+import 'package:path_provider_ex/path_provider_ex.dart';
 import 'package:googledriveclone_flutter/Widget/smallGrid.dart';
 
 void main() {
@@ -27,12 +32,14 @@ class MyDriveScreenPage extends StatefulWidget {
 
 class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTickerProviderStateMixin{
 
-
+  var devicefile;
   final TrackingScrollController scrollController = TrackingScrollController();
   TabController controller;
 
+
   @override
   void initState() {
+    getFiles();
     super.initState();
     controller = new TabController(length: 2, vsync: this);
   }
@@ -55,8 +62,8 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
                   indicatorSize: TabBarIndicatorSize.label,
                   unselectedLabelColor: Colors.grey,
                   tabs: [
-                    Tab(text: "My Drive",),
-                    Tab(text: "Computers",),
+                    Tab(text: "My Web Locker",),
+                    Tab(text: "Device",),
                   ],
                 ),
               ),
@@ -67,8 +74,9 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
           body: TabBarView(
             controller: controller,
             children: [
+              //My web locker
               Container(
-                child: GridView.builder(
+                child: files.length>0?GridView.builder(
                   padding: EdgeInsets.all(20),
                   itemCount: files.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:  2 ),
@@ -78,17 +86,61 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
                         child: new SmallGridWIdget(file: files[index],)
                     );
                   },
+                ):
+                Container(
+                  padding: const EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/notfound.png', width: MediaQuery.of(context).size.width-100,),
+                          Text('Nothing found',style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 22),),
+                        ]
+
+                    )
                 ),
               ),
+              //My device locker
               Container(
-                child: Center(
-                  child: Text('Design Required'),
-                ),
+                child: devicefile?.length.toString()=="0"?GridView.builder(
+                  //print(devicefile?.length.toString());
+                  padding: EdgeInsets.all(20),
+                  itemCount: devicefile?.length ?? 0,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:  2 ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return  Container(
+                        padding: EdgeInsets.only(top: 20, bottom: 20, left: 20),
+                        child: SmallGridWIdget(file: devicefile[index],)
+                    );
+                  },
+                ):
+                Text('Nothing found',style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 28),),
               )
             ],
           )
       ),
     );
+  }
+
+  void getFiles() async { //asyn function to get list of files
+
+    try {
+      List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
+      var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
+      var fm = FileManager(root: Directory(root)); //
+      print("Device file calculating" + root.toString());
+      devicefile = await fm.filesTree(
+        //set fm.dirsTree() for directory/folder tree list
+        excludedPaths: ["/storage/emulated/0/Android"],
+        // extensions: ["png", "pdf","docx","xlsx","jpg"] //optional, to filter files, remove to list all,
+        //remove this if your are grabbing folder list
+      );
+    }
+    catch(e){
+      print("Error getting device files"+e.toString());
+    }
+    print('Device files'+devicefile?.length.toString());
+    setState(() {}); //update the UI
   }
 }
 

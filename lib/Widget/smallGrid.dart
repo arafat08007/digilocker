@@ -83,12 +83,15 @@ class _SmallGridWIdgetPageState extends State<SmallGridWIdgetPage> {
                   children: [
 
                     Container(
-                        height: 25,
-                        width: 20,
+                        height: 22,
+                        width: 18,
+                        padding: EdgeInsets.only(right: 5),
                         child: fileImage(widget.file.fileType)
                     ),
                     Container(
-                        child: Text(widget.file.fileName, style: TextStyle(fontSize: 10),)
+                        width: MediaQuery.of(context).size.width*0.3,
+                        child: Text(widget.file.fileName, style: TextStyle(fontSize: 10),  maxLines: 3,
+                          overflow: TextOverflow.ellipsis,)
                     ),
                     Container(
                       child: Icon(Icons.more_vert),

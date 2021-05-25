@@ -44,6 +44,8 @@ class _RecentWidgetPageState extends State<RecentWidgetPage> {
                 children: [
                   Container(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
                             height: 25,
@@ -52,7 +54,9 @@ class _RecentWidgetPageState extends State<RecentWidgetPage> {
                         ),
                         SizedBox(width: 30,),
                         Container(
-                            child: Text(widget.recent.fileName, style: TextStyle(fontSize: 18),)
+                          width: MediaQuery.of(context).size.width-200,
+                            child: Text(widget.recent.fileName, style: TextStyle(fontSize: 14), maxLines: 2,
+                              overflow: TextOverflow.ellipsis,)
                         ),
                       ],
                     ),

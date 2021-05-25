@@ -40,7 +40,7 @@ class _IssuedWidgetPageState extends State<IssuedWidgetPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
@@ -53,7 +53,9 @@ class _IssuedWidgetPageState extends State<IssuedWidgetPage> {
                         ),
                         SizedBox(width: 30,),
                         Container(
-                            child: Text(widget.issued.fileName, style: TextStyle(fontSize: 18),)
+                            width: MediaQuery.of(context).size.width-250,
+                            child: Text(widget.issued.fileName, style: TextStyle(fontSize: 14), maxLines: 2,
+                              overflow: TextOverflow.ellipsis,)
                         ),
                         SizedBox(width: 30,),
                         fileImage(widget.issued.docmenttype),

@@ -12,14 +12,14 @@ List<Recent> recents = [
     fileType: 'sheets',
   ),
   Recent(
-    fileImage: 'https://miro.medium.com/max/768/1*dFLf9y6lNmFDGBSQJvBWOA.jpeg',
-    fileName: "Portflio Tracker",
+    fileImage: 'https://m.media-amazon.com/images/I/51W3sMlzUML._AC_UY218_.jpg',
+    fileName: "A history of bangladesh",
     fileType: 'pdf',
   ),
   Recent(
-    fileImage: 'https://miro.medium.com/max/612/1*O_dmzQldxVWhmzW77S-60g.jpeg',
-    fileName: "About Elements",
-    fileType: 'docs',
+    fileImage: 'https://m.media-amazon.com/images/I/81rykD1OuUL._AC_UY218_.jpg',
+    fileName: "1971: A Global History of the Creation of Bangladesh",
+    fileType: 'pdf',
   ),
   Recent(
     fileImage: 'https://user-images.githubusercontent.com/38372696/91842542-e1aea480-ec71-11ea-938f-7bcd3d23a382.png',
