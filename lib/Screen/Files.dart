@@ -114,7 +114,18 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
                     );
                   },
                 ):
-                Text('Nothing found',style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 28),),
+                Container(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/notfound.png', width: MediaQuery.of(context).size.width-100,),
+                          Text('Nothing found',style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 22),),
+                        ]
+
+                    )
+                ),
               )
             ],
           )

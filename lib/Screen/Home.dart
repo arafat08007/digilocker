@@ -393,8 +393,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             TextButton(
               child: Text('Cancel', style: TextStyle(color: Colors.red),),
               onPressed: () {
-                Get.back();
-                //Navigator.of(context).pop();
+                //Navigator.pop(_);
+                Navigator.of(context).pop();
                // _animationController.reverse();
               },
             ),
@@ -423,7 +423,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       title: 'Choose File category',
       onCancelBtnTap: (value) {
         print('Cancel Button Tapped');
-        Get.back();
+        Navigator.of(context).pop(false);
       },
       onRadioButtonSelection: (value) {
         print('onRadioButtonSelection $value');
