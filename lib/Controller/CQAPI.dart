@@ -9,104 +9,131 @@ import 'package:http/http.dart' as http;
 
 class CQAPI {
   static var client = http.Client();
-  static var _baseURL = "https://idp-api.eksheba.gov.bd/";
+  static var _baseURL = "https://idp-api.eksheba.gov.bd";
 
   static Future<List> refreshToken({String token}) async {
-    var response =
-    await client.post('$_baseURL/auth/refresh', headers: <String, String>{
-      'Authorization': 'Bearer $token',
-    });
+    try {
+      print(_baseURL);
+      var response =
+      await client.post('$_baseURL/auth/refresh', headers: <String, String>{
+        'Authorization': 'Bearer $token',
+      });
 
-    if (response.statusCode == 200) {
-      var json = response.body;
-      //status is success but not excepted result
-      if (json.contains("access_token") == false) {
-        return ["", "Unknown Error"];
-      }
-      var loginRes = loginTokenFromJson(json);
-      if (loginRes != null) {
-        return [loginRes.token, ""];
+      if (response.statusCode == 200) {
+        var json = response.body;
+        //status is success but not excepted result
+        if (json.contains("access_token") == false) {
+          return ["", "Unknown Error"];
+        }
+        var loginRes = loginTokenFromJson(json);
+        if (loginRes != null) {
+          return [loginRes.token, ""];
+        } else {
+          return ["", "Unknown Error"];
+        }
       } else {
-        return ["", "Unknown Error"];
-      }
-    } else {
-      var json = response.body;
-      var errorResp = errorRespFromJson(json);
-      if (errorResp == null) {
-        return ["", "Unknown Error"];
-      } else {
-        return ["", errorResp.error];
+        var json = response.body;
+        var errorResp = errorRespFromJson(json);
+        if (errorResp == null) {
+          return ["", "Unknown Error"];
+        } else {
+          return ["", errorResp.error];
+        }
       }
     }
+    catch(e){
+      print("Token Refres error"+e.toString());
+    }
+
   }
 
-  static Future<List> createtoken( {String email, String password}) async {
+  static Future<List> createtoken( {String mobile, String password}) async {
     var token;
-    var response = await client.post('$_baseURL/token/create',
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body:
-        jsonEncode(<String, String>{"client_id": 'ZcwzbhUZgS3hgUKJpiPI', "api_key": '33hUO6ZCt3.BTjmjwtuZA'}));
+    print(_baseURL);
+    try {
+      var response = await client.post('$_baseURL/token/create',
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body:
+          jsonEncode(<String, String>{
+            "client_id": "ZcwzbhUZgS3hgUKJpiPI",
+            "api_key": "33hUO6ZCt3.BTjmjwtuZA"
+          }));
 
-    if (response.statusCode == 200) {
-      var json = response.body;
-      var loginRes = loginTokenFromJson(json);
-      if (loginRes != null) {
-        token = loginRes.token;
-       // return [loginRes.token, ""];
-        return loginRequest(token:token, email:email, password:password);
+      if (response.statusCode == 200) {
+        var json = response.body;
+        print("Token response: "+json.toString());
+        var loginRes = loginTokenFromJson(json);
+        if (loginRes != null) {
+          token = loginRes.token;
+          print("The token\t"+token);
+          // return [loginRes.token, ""];
+          return loginRequest(token: token, mobile: mobile, password: password);
+        } else {
+          return ["Error creating token", "Unknown Error"];
+        }
       } else {
-        return ["", "Unknown Error"];
+        var json = response.body;
+        var errorResp = errorRespFromJson(json);
+        if (errorResp == null) {
+          return ["", "Unknown Error"];
+        } else {
+          return ["", errorResp.error];
+        }
       }
-
-    } else {
-      var json = response.body;
-      var errorResp = errorRespFromJson(json);
-      if (errorResp == null) {
-        return ["", "Unknown Error"];
-      } else {
-        return ["", errorResp.error];
-      }
+    }
+    catch(e){
+      print("Token create error"+e.toString());
     }
   }
 
-  static Future<List> loginRequest({token, String email, String password}) async {
+  static Future<List> loginRequest({token, String mobile, String password}) async {
     var userid;
-    var response = await client.post('$_baseURL/user/login',
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body:
-        jsonEncode(<String, String>{"token": token, "mobile": email,  "password": password }));
+    try {
+      print("Token\t $token \t mobile \t $mobile \t pass\t $password");
+      var response = await client.post('$_baseURL/user/login',
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body:
+          jsonEncode(<String, String>
+          {
+            "token": "$token",
+            "mobile": "$mobile",
+            "password": "$password"
+          }));
 
-    if (response.statusCode == 200) {
-      var json = response.body;
-      var loginRes = loginUserFromJson(json);
-      if (loginRes != null) {
-        userid = loginRes.data.id;
-        print(loginRes.toString());
-        return [
-          loginRes.data.id,
-          loginRes.data.email,
-          loginRes.data.name,
-          loginRes.data.mobile,
-          loginRes.data.nid,
+      if (response.statusCode == 200) {
+        var json = response.body;
+        var loginRes = loginUserFromJson(json);
+        if (loginRes != null) {
+          userid = loginRes.data.id;
+          print(loginRes.toString());
+          return [
+            loginRes.data.id,
+            loginRes.data.email,
+            loginRes.data.name,
+            loginRes.data.mobile,
+            loginRes.data.nid,
 
-        ];
-
+          ];
+        } else {
+          return ["", "Unknown Error"];
+        }
       } else {
-        return ["", "Unknown Error"];
-      }
-
-    } else {
-      var json = response.body;
-      var errorResp = errorRespFromJson(json);
-      if (errorResp == null) {
-        return ["", "Unknown Error"];
-      } else {
-        return ["", errorResp.error];
+        var json = response.body;
+        var errorResp = errorRespFromJson(json);
+        if (errorResp == null) {
+          return ["", "Unknown Error"];
+        } else {
+          return ["", errorResp.error];
+        }
       }
     }
+    catch(e){
+      print("Login request error"+e.toString());
+    }
   }
+
 }

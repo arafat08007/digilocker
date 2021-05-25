@@ -11,7 +11,9 @@ const kPrimaryLightColor = Color(0xFFe7f3f7);
 const loginPagebgColor = Color (0xFFE7E6E7);
 
 void showSnackMessage(BuildContext context, String s, GlobalKey<ScaffoldState> scaffoldKey,String type) {
+
   final snackBar = SnackBar(
+
       backgroundColor: type.isEmpty?kPrimaryColor:Colors.red,
       content: Text(s.toString(), textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontWeight:FontWeight.normal, fontSize: 12),)
   );

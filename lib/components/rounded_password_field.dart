@@ -9,6 +9,7 @@ class RoundedPasswordField extends StatelessWidget {
   final TextEditingController simplepassctrl;
   bool showhide ;
   final ValueChanged<bool> showhideChanged;
+  bool isEnable;
 
    RoundedPasswordField({
     Key key,
@@ -16,12 +17,14 @@ class RoundedPasswordField extends StatelessWidget {
     this.showhide,
     this.simplepassctrl,
      this.showhideChanged,
+     this.isEnable,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        enabled: isEnable,
         controller: simplepassctrl,
         obscureText: showhide,
         onChanged: onChanged,

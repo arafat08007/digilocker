@@ -8,11 +8,12 @@ class LoginController extends GetxController {
   var loginProcess = false.obs;
   var error = "";
 
-  Future<String> login({String email, String password}) async {
+  Future<String> login({String mobile, String password}) async {
     error = "";
     try {
       loginProcess(true);
-      List loginResp = await CQAPI.createtoken(email: email, password: password);
+      List loginResp = await CQAPI.createtoken(mobile: mobile, password: password);
+      print('Login api response: '+loginResp.toString());
       if (loginResp[0] != "") {
         //success
         final prefs = await SharedPreferences.getInstance();

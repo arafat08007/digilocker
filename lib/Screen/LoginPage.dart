@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:googledriveclone_flutter/Controller/LoginController.dart';
 import 'package:googledriveclone_flutter/Screen/Home.dart';
 import 'package:googledriveclone_flutter/Screen/signup_screen.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
@@ -19,6 +20,7 @@ class LoginPage extends StatelessWidget {
   TextEditingController _userIdCntrl = TextEditingController();
   TextEditingController _userPassCntrl = TextEditingController();
   final _globalscaffoldKey = GlobalKey<ScaffoldState>();
+  final LoginController _login_controller = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   RoundedInputField(
                     icon: Icons.person,
+                    isEnable: !_login_controller.loginProcess.value,
                     simpleinputctrl:_userIdCntrl,
                     hintText: "email / mobile phone / NID",
                     onChanged: (value) {
@@ -59,6 +62,7 @@ class LoginPage extends StatelessWidget {
                     },
                   ),
                   RoundedPasswordField(
+                    isEnable: !_login_controller.loginProcess.value,
                     simplepassctrl:_userPassCntrl,
                     showhide: true,
                     showhideChanged: (value){
@@ -70,9 +74,54 @@ class LoginPage extends StatelessWidget {
                   ),
                   RoundedButton(
                     text: "LOGIN",
-                    press: () {
+                    press: () async {
+                      try {
+                        if (_userIdCntrl.text
+                            .toString()
+                            .isEmpty) {
+                          showSnackMessage(
+                              context, "email/NID/phone field is empty.",
+                              _globalscaffoldKey, 'red');
+                          return;
+                        }
+                        else if (_userPassCntrl.text
+                            .toString()
+                            .isEmpty) {
+                          showSnackMessage(
+                              context, "Password field is empty",
+                              _globalscaffoldKey, 'red');
+                          return;
+                        }
+                        else {
+                          String error = await _login_controller.login(
+                              mobile: _userIdCntrl.text.toString(),
+                              password: _userPassCntrl.text.toString());
+                          print("Login button pressed" + error.toString());
+                          if (error != "") {
+                            showSnackMessage(
+                                context,
+                                "Login credential mismatch! Try again.",
+                                _globalscaffoldKey, 'red');
+                            //Get.defaultDialog(
+                            //  title: "Oop!", middleText: error);
+                          } else {
+                            showSnackMessage(context,
+                                "Login in , please wait...",
+                                _globalscaffoldKey, '');
+                            Get.to(HomePage());
+                          }
+                        }
+                      }
+                      catch(e){
+                        print("Login button pressed Error" + e.toString());
+                        showSnackMessage(
+                            context, "Login credential mismatch! Try again.",
+                            _globalscaffoldKey, 'red');
+                      }
+                    }
+                    ,
 
-                      print(_userIdCntrl.text+"<>"+_userPassCntrl.text);
+                     /* print(_userIdCntrl.text+"<>"+_userPassCntrl.text);
                       var userid= _userIdCntrl.text.toString().trim();
                       var uesrpass = _userPassCntrl.text.toString().trim();
                       if(userid.toLowerCase()=='admin'.toLowerCase() && uesrpass.toLowerCase()=='admin'.toLowerCase()) {
@@ -81,7 +130,7 @@ class LoginPage extends StatelessWidget {
                         Get.to(() => HomePage());
                       }
                       else showSnackMessage(context, "Login credential mismatch! Try again.", _globalscaffoldKey,'red');
-                    },
+                    },*/
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   AlreadyHaveAnAccountCheck(
