@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final loginTokenCreate = loginTokenCreateFromJson(jsonString);
+//     final loginToken = loginTokenFromJson(jsonString);
 
 import 'dart:convert';
 
-LoginTokenCreate loginTokenCreateFromJson(String str) => LoginTokenCreate.fromJson(json.decode(str));
+LoginToken loginTokenFromJson(String str) => LoginToken.fromJson(json.decode(str));
 
-String loginTokenCreateToJson(LoginTokenCreate data) => json.encode(data.toJson());
+String loginTokenToJson(LoginToken data) => json.encode(data.toJson());
 
-class LoginTokenCreate {
-  LoginTokenCreate({
+class LoginToken {
+  LoginToken({
     this.status,
     this.token,
     this.expireTime,
@@ -19,7 +19,7 @@ class LoginTokenCreate {
   String token;
   int expireTime;
 
-  factory LoginTokenCreate.fromJson(Map<String, dynamic> json) => LoginTokenCreate(
+  factory LoginToken.fromJson(Map<String, dynamic> json) => LoginToken(
     status: json["status"],
     token: json["token"],
     expireTime: json["expire_time"],

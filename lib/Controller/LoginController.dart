@@ -12,11 +12,11 @@ class LoginController extends GetxController {
     error = "";
     try {
       loginProcess(true);
-      List loginResp = await CQAPI.login(email: email, password: password);
+      List loginResp = await CQAPI.createtoken(email: email, password: password);
       if (loginResp[0] != "") {
         //success
         final prefs = await SharedPreferences.getInstance();
-        prefs.setString("token", loginResp[0]);
+        prefs.setString("id", loginResp[0]);
       } else {
         error = loginResp[1];
       }
