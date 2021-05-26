@@ -108,7 +108,7 @@ class LoginPage extends StatelessWidget {
                             showSnackMessage(context,
                                 "Login in , please wait...",
                                 _globalscaffoldKey, '');
-                            Get.to(HomePage());
+                            Get.offAll(HomePage());
                           }
                         }
                       }

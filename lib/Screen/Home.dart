@@ -4,7 +4,7 @@ import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:get/get.dart';
 import 'package:googledriveclone_flutter/Screen/Files.dart';
 import 'package:googledriveclone_flutter/Screen/HomeScreen.dart';
@@ -50,7 +50,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
   Widget _widgetBody = HomeScreen();
   int _currrentIndex = 0;
@@ -58,28 +58,24 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   AnimationController _animationController;
   TextEditingController _foldername = TextEditingController();
 
-  //TextEditingController _controller = TextEditingController();
- // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _fileName;
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
   bool isFolder;
   double _diskSpace = 0;
-  var _freespace ;
-  var _freespacemb;
-  var _occupiedSpace ;
-  var _totalSpace;
+  String _freespace ="0" ;
+  String _freespacemb ="0" ;
+  String _occupiedSpace ="0";
+  String _totalSpace="0";
   @override
   void initState() {
     // TODO: implement initState
+    print('Home page loading');
   //  _controller.addListener(() => _extension = _controller.text);
-    _getStorgeInfo();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
-    );
 
+    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300),);
+    //_getStorgeInfo();
     final curvedAnimation = CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
   //  initDiskSpace();
@@ -130,9 +126,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   crossAxisAlignment: CrossAxisAlignment.center,
 
                   children: [
-                    Image.asset('assets/digi_locker.png', width: MediaQuery.of(context).size.width*0.30,),
+                    Image.asset('assets/digi_locker.png', width: 300,),
                    SizedBox(height: 10,),
-                    Text('Available space: '+_freespace+'\t (MB)'),
+                    Text('Available space: '+_freespace.toString()+'\t (MB)'),
 
                   ]
               ),
@@ -276,7 +272,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
        child:  Container(
             padding: EdgeInsets.all(15.0),
-              child: _widgetBody
+              child: FutureBuilder(
+                future: _getStorgeInfo(),
+                builder: (context, snapshot){
+                  if(snapshot.connectionState!=ConnectionState.done) return CircularProgressIndicator();
+                    return _widgetBody;
+
+                },
+              )
           ),
 
       ),
@@ -431,18 +434,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 
- /* Future<void> initDiskSpace() async {
-    double diskSpace = 0;
-
-    diskSpace = await DiskSpace.getFreeDiskSpace;
-
-    if (!mounted) return;
-
-    setState(() {
-      _diskSpace = diskSpace;
-    });
-  }
-*/
  Future<void> _getStorgeInfo()  async{
    _freespace = await StorageCapacity.getFreeSpace;
    //_freespacemb = await  StorageCapacity.toMegaBytes(double.parse(_freespace.toString()));
