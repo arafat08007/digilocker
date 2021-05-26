@@ -93,10 +93,15 @@ class LoginPage extends StatelessWidget {
                           return;
                         }
                         else {
+                          showSnackMessage(context,
+                              "Login in , please wait...",
+                              _globalscaffoldKey, '');
+
                           String error = await _login_controller.login(
                               mobile: _userIdCntrl.text.toString(),
                               password: _userPassCntrl.text.toString());
                           print("Login button pressed" + error.toString());
+
                           if (error != "") {
                             showSnackMessage(
                                 context,
@@ -105,9 +110,7 @@ class LoginPage extends StatelessWidget {
                             //Get.defaultDialog(
                             //  title: "Oop!", middleText: error);
                           } else {
-                            showSnackMessage(context,
-                                "Login in , please wait...",
-                                _globalscaffoldKey, '');
+
                             Get.offAll(HomePage());
                           }
                         }

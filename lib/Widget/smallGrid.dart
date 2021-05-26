@@ -39,7 +39,10 @@ class _SmallGridWIdgetPageState extends State<SmallGridWIdgetPage> {
         padding: EdgeInsets.only(left: 10, right: 10,),
         child: Container(
          // height: 250,
-          //color: kPrimaryLightColor,
+          color: kPrimaryLightColor.withOpacity(0.5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+          ),
           padding: EdgeInsets.only( bottom: 5, top: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
