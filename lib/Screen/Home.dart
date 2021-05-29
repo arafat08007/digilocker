@@ -12,12 +12,14 @@ import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
 import 'package:googledriveclone_flutter/Screen/Profile.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:prompt_dialog/prompt_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sk_alert_dialog/sk_alert_dialog.dart';
 import 'package:storage_capacity/storage_capacity.dart';
 
 import 'IssudFile.dart';
 
 void main() {
+
   runApp(HomePage());
 }
 
@@ -51,7 +53,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
-
+  SharedPreferences prefs ;
   Widget _widgetBody = HomeScreen();
   int _currrentIndex = 0;
   Animation<double> _animation;
@@ -189,8 +191,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
             ListTile(
               leading: Icon(Icons.logout),
               title: Text('Logout'),
-              onTap: () {
+              onTap: () async {
                // Get.back();
+                //SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs= await SharedPreferences.getInstance();
+                prefs.remove('userid');
                 Get.offAll(LoginPage());
                 //Do some stuff here
                 //Closing programmatically - very less practical use

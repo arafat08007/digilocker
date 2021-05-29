@@ -6,6 +6,7 @@ import 'package:googledriveclone_flutter/Models/ErrorResp.dart';
 import 'package:googledriveclone_flutter/Models/LoginTokenCreate.dart';
 import 'package:googledriveclone_flutter/Models/Loginapi.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CQAPI {
   static var client = http.Client();
@@ -90,6 +91,7 @@ class CQAPI {
 
   static Future<List> loginRequest({token, String mobile, String password}) async {
     var userid;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       print("Token\t $token \t mobile \t $mobile \t pass\t $password");
       var response = await client.post('$_baseURL/user/login',
@@ -110,6 +112,7 @@ class CQAPI {
         if (loginRes != null) {
           userid = loginRes.data.id;
           print(loginRes.toString());
+          prefs.setString("userid", ""+loginRes.data.id);
           return [
             loginRes.data.id,
             loginRes.data.email,
@@ -118,6 +121,7 @@ class CQAPI {
             loginRes.data.nid,
 
           ];
+        //  prefs.setString("id", ""+loginRes.data.id);
         } else {
           return ["", "Unknown Error"];
         }

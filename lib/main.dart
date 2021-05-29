@@ -5,14 +5,22 @@ import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-void main() {
-  runApp(GetMaterialApp( home: MyApp()));
+import 'package:shared_preferences/shared_preferences.dart';
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var userid = prefs.getString('userid');
+  print("UserID"+userid.toString());
+ // runApp(GetMaterialApp( home: MyApp()));
+  runApp(GetMaterialApp(home: userid.toString().isEmpty || userid.toString() == null ? MyApp() : HomePage()));
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Digilocker',
@@ -21,21 +29,21 @@ class MyApp extends StatelessWidget {
 
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Digilocker'),
+      home: MyLoginPage (title: 'Digilocker'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MyLoginPage extends StatefulWidget {
+  MyLoginPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyLoginPageState createState() => _MyLoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyLoginPageState extends State<MyLoginPage> {
 
   @override
   initState(){
