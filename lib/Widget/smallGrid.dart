@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:googledriveclone_flutter/Models/Files.dart';
 import 'package:googledriveclone_flutter/Screen/Home.dart';
@@ -36,51 +37,51 @@ class _SmallGridWIdgetPageState extends State<SmallGridWIdgetPage> {
 
     return Container(
       //color: Colors.white,
-        padding: EdgeInsets.only(left: 10, right: 10,),
+       padding: EdgeInsets.only(left: 10, right: 5,),
+     //padding: EdgeInsets.all(5),
         child: Container(
-         // height: 250,
-          color: kPrimaryLightColor.withOpacity(0.5),
+
           decoration: BoxDecoration(
+
             borderRadius: BorderRadius.circular(5),
+            color: Colors.white,
           ),
           padding: EdgeInsets.only( bottom: 5, top: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              widget.file.isFolder?
-              Container(
+              if (widget.file.isFolder) Container(
                 margin: EdgeInsets.only(top: 10),
-                height: 100,
+                height: 50,
                 child: Container(
-                    padding: EdgeInsets.only(top: 5, left: 20, right: 20, bottom: 10),
-                    child: Icon(Icons.folder, size: 100, color: Colors.grey[500],)
+                    padding: EdgeInsets.only(top: 5, left: 25, right: 15, bottom: 20),
+                    child: Icon(Icons.folder, size: 80, color: Colors.grey[500],)
                 ),
-              )
-              :
-              Container(
-                margin: EdgeInsets.only(top: 20),
-                height: 100,
+              ) else Container(
+                margin: EdgeInsets.only(top: 10),
+                height: 55,
+
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey[200]
+                    //color: Colors.grey[200]
                 ),
                 child: Container(
-                    padding: EdgeInsets.only(top: 30, left: 20, right: 20),
+                    padding: EdgeInsets.only(top: 10, left: 10, right: 10),
                     child: Align(
-                        alignment: Alignment.bottomCenter,
+                        alignment: Alignment.center,
                         child: InteractiveViewer(
                             panEnabled: false, // Set it to false
                             boundaryMargin: EdgeInsets.all(20),
                             minScale: 0.5,
                             maxScale: 3,
-                            child: Image.network(widget.file.fileImage, fit: BoxFit.cover,)
+                            child: Image.network(widget.file.fileImage, fit: BoxFit.contain)
                         )
                     )
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 10, left: 5),
+                padding: EdgeInsets.only(top: 20, left: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -91,13 +92,15 @@ class _SmallGridWIdgetPageState extends State<SmallGridWIdgetPage> {
                         padding: EdgeInsets.only(right: 5),
                         child: fileImage(widget.file.fileType)
                     ),
-                    Container(
-                        width: MediaQuery.of(context).size.width*0.3,
-                        child: Text(widget.file.fileName, style: TextStyle(fontSize: 10),  maxLines: 3,
-                          overflow: TextOverflow.ellipsis,)
+                    Expanded(
+                      child: Container(
+                          width: MediaQuery.of(context).size.width*0.3,
+                          child: Text(widget.file.fileName, style: TextStyle(fontSize: 10),  maxLines: 3,
+                            overflow: TextOverflow.ellipsis,)
+                      ),
                     ),
                     Container(
-                      child: Icon(Icons.more_vert),
+                      child: Icon(Icons.more_vert, color: Colors.grey,),
                     ),
                   ],
                 ),

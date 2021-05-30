@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 const kPrimaryColor = Color(0xFF1EA6C6);
 //const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFe7f3f7);
@@ -23,7 +24,7 @@ Future<void> createFolder(BuildContext context, GlobalKey<ScaffoldState> scaffol
 //  print('creating folder'+scaffoldKey.toString()+"\t context\t"+context.toString());
   final Directory _appDocDir = await getApplicationDocumentsDirectory();
   print('app doc dir'+ _appDocDir.toString());
-  final Directory _appDocDirFolder = Directory('${_appDocDir.path}/$s/');
+  final Directory _appDocDirFolder = Directory('${_appDocDir.path}/digilocker/$s/');
   print('created dir \t $_appDocDirFolder');
   if(await _appDocDirFolder.exists()){ //if folder already exists return path
     print('Folder already exist');
@@ -63,9 +64,54 @@ fileImage(String filename){
   }
   else if(filename.toLowerCase() == 'folder'){
     print(filename);
-    return Icon(Icons.folder_open_outlined, color: Colors.black54, size: 16,);
+    return Icon(Icons.folder_open_outlined, color: Colors.black54, size: 12,);
   }
   else{
     return Icon(Icons.wysiwyg_rounded, color: Colors.red,);
+  }
+}
+
+createDir() async {
+  try {
+    print("Creating directory");
+    String s ='Digilocker';
+    // Directory baseDir = await getExternalStorageDirectory(); //only for Android
+    final Directory _appDocDir = await getApplicationDocumentsDirectory();
+    print('app doc dir'+ _appDocDir.toString());
+    final Directory _appDocDirFolder = Directory('${_appDocDir.path}/$s/');
+    print('created dir \t $_appDocDirFolder');
+    if(await _appDocDirFolder.exists()){ //if folder already exists return path
+      print('Folder already exist');
+      //showSnackMessage(BuildContext, "Folder already exist.", scaffoldKey,'red');
+      return _appDocDirFolder.path;
+
+    }else{//if folder not exists create folder and then return its path
+      //showSnackMessage(context, "Folder Created.", scaffoldKey,'');
+      final Directory _appDocDirNewFolder=await _appDocDirFolder.create(recursive: true);
+      return _appDocDirNewFolder.path;
+    }
+
+  }
+  catch(e){
+    print ("Directory error"+e.toString());
+  }
+  //Now you can use this directory for saving file, etc.
+  //In case you are using external storage, make sure you have storage permissions.
+}
+
+Future<bool> _checkStoragePermission() async {
+  bool isStorgage = false;
+  var storgestatus = await Permission.storage.status;
+
+  if (storgestatus.isDenied) {
+    // We didn't ask for permission yet or the permission has been denied before but not permanently.
+    print ('Permission denied');
+    return isStorgage;
+  }
+  else{
+    print ('Permission Accepted');
+
+    isStorgage = true;
+    return isStorgage;
   }
 }

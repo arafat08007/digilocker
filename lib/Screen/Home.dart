@@ -11,12 +11,14 @@ import 'package:googledriveclone_flutter/Screen/HomeScreen.dart';
 import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
 import 'package:googledriveclone_flutter/Screen/Profile.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:prompt_dialog/prompt_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sk_alert_dialog/sk_alert_dialog.dart';
 import 'package:storage_capacity/storage_capacity.dart';
 
 import 'IssudFile.dart';
+import 'SharedFile.dart';
 
 void main() {
 
@@ -59,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
   Animation<double> _animation;
   AnimationController _animationController;
   TextEditingController _foldername = TextEditingController();
-
+String permissionstatus ="Ok";
 
   String _fileName;
 
@@ -75,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
     // TODO: implement initState
     print('Home page loading');
   //  _controller.addListener(() => _extension = _controller.text);
-
+    createDir();
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300),);
     //_getStorgeInfo();
     final curvedAnimation = CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
@@ -98,11 +100,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       }
       else if(index == 1){
         _currrentIndex = index;
-        _widgetBody = MyIssuedDocScreen();
+        _widgetBody = MyIssuedDocScreenPage();
       }
       else if(index == 2){
         _currrentIndex = index;
-        _widgetBody = Center(child: Text('Shared documents'),);
+        _widgetBody = MySharedDocScreenPage();
       }
       else if(index == 3){
         _currrentIndex = index;
@@ -150,11 +152,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
               },
             ),
             Divider(),
+
+
             ListTile(
               leading: Icon(Icons.create_new_folder),
               title: Text('Create folder'),
               onTap: () {
                 // Get.back();
+               // checkpermission;
+                checkpermission(context);
                 _showMyDialog();
               },
             ),
@@ -164,6 +170,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
               title: Text('File upload'),
               onTap: () {
                 // Get.back();
+                checkpermission(context);
+                _openFileType(context);
 
               },
             ),
@@ -174,6 +182,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
               onTap: () {
                 // Get.back();
 
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.history),
+              title: Text('History'),
+              onTap: () {
+                // Get.back();
+                _showMyDialog();
               },
             ),
             Divider(),
@@ -306,6 +322,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
             onPress: () {
             //  OpenFilePicker();
               _animationController.reverse();
+              checkpermission(context);
               _openFileType(context);
             },
           ),
@@ -317,11 +334,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
             bubbleColor : Colors.white.withOpacity(0.9),
             titleStyle:TextStyle(fontSize: 16 , color: kPrimaryColor),
             onPress: ()  {
-              _animationController.reverse();
-              print('creating folder');
-              _showMyDialog();
-
-
+              _animationController.reverse();       
+              
+              checkpermission(context);          
+              _showMyDialog();                //_showErrorDialog();
+      
             },
           ),
           //Floating action menu item
@@ -421,7 +438,33 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       },
     );
   }
+  Future<void> _showErrorDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
 
+          backgroundColor: Colors.white,
+          elevation: 13,
+          title: Text('Error!' ,style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 28),),
+          content: Text('Permission denied, You can set permission manually', maxLines: 3,
+              overflow: TextOverflow.ellipsis),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK', style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.bold),),
+              onPressed: () {
+                //Navigator.pop(_);
+                Navigator.of(context).pop();
+                // _animationController.reverse();
+              },
+            ),
+
+          ],
+        );
+      },
+    );
+  }
   void _openFileType(BuildContext context) {
 
     SKAlertDialog.show(
@@ -448,6 +491,74 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
 
 
+}
+
+Future<String> checkpermission(BuildContext context) async{
+  String permission="OK";
+  var cameraStatus = await Permission.camera.status;
+  var microphoneStatus = await Permission.storage.status;
+
+  print(cameraStatus);
+  print(microphoneStatus);
+  //cameraStatus.isGranted == has access to application
+  //cameraStatus.isDenied == does not have access to application, you can request again for the permission.
+  //cameraStatus.isPermanentlyDenied == does not have access to application, you cannot request again for the permission.
+  //cameraStatus.isRestricted == because of security/parental control you cannot use this permission.
+  //cameraStatus.isUndetermined == permission has not asked before.
+
+  if (!cameraStatus.isGranted)
+    await Permission.camera.request();
+
+  if (!microphoneStatus.isGranted)
+    await Permission.storage.request();
+
+  if(await Permission.storage.isGranted){
+    if(await Permission.camera.isGranted){
+    //  openCamera();
+      return permission;
+    }else{
+      print('Camera needs to access your microphone, please provide permission');
+      permission ="NO";
+    //  showToast("Camera needs to access your microphone, please provide permission", position: ToastPosition.bottom);
+    }
+  }else{
+    permission ="NO";
+    print('Provide storage permission to use camera');
+   // showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
+  }
+ // return  permission ;
+}
+
+ _checkStoragePermission() async {
+  bool isStorgage = false;
+  var storgestatus = await Permission.storage.status;
+  var camerastatus = await Permission.camera.status;
+  print ('Storage'+storgestatus.toString()+'Camera'+camerastatus.toString());
+  if (storgestatus.isDenied) {
+    // We didn't ask for permission yet or the permission has been denied before but not permanently.
+    print ('Permission denied');
+    await Permission.storage.request();
+
+  }
+  else{
+    print ('Permission Accepted');
+
+    isStorgage = true;
+
+  }
+
+  if (camerastatus.isDenied) {
+    // We didn't ask for permission yet or the permission has been denied before but not permanently.
+    print ('Permission denied');
+    await Permission.camera.request();
+
+  }
+  else{
+    print ('Permission Accepted');
+
+
+
+  }
 }
 
 

@@ -40,15 +40,18 @@ dependencies:
   flutter_file_manager: ^0.2.0
   folder_file_saver: ^1.0.0+2
   dio: any
-  email_validator: ^1.0.0
+  #email_validator: ^1.0.0
   shared_preferences: any
   http: ^0.12.2
+  permission_handler: ^8.0.0+2
     #path: ../
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  #file_picker: any
+  local_auth: ^1.1.6
 
 dev_dependencies:
   flutter_test:

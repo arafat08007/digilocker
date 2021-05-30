@@ -37,7 +37,8 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
 
       children: [
         Text('Recent',style: TextStyle(color: Colors.black54,fontSize: 18, fontWeight: FontWeight.bold),),
-        SizedBox(height: 10,),
+        Divider(height: 20,),
+
         Expanded(
         child: ListView.builder(
             itemCount: recents.length,

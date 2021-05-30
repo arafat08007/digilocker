@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:googledriveclone_flutter/Screen/Home.dart';
 import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
+import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,10 +13,10 @@ Future<void> main() async {
   var userid = prefs.getString('userid');
   print("UserID"+userid.toString());
  // runApp(GetMaterialApp( home: MyApp()));
-  runApp(GetMaterialApp(home: userid.toString().isEmpty || userid.toString() == null ? MyApp() : HomePage()));
+  runApp(GetMaterialApp(home: (userid.toString().isEmpty) || (userid.toString() == null) ? MyLoginApp() : HomePage()));
 }
 
-class MyApp extends StatelessWidget {
+class MyLoginApp extends StatelessWidget {
   // This widget is the root of your application.
 
   @override
@@ -48,6 +49,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
   @override
   initState(){
     createDir(); //call your method here
+
     super.initState();
   }
   @override
@@ -58,24 +60,5 @@ class _MyLoginPageState extends State<MyLoginPage> {
       body: LoginPage(),//HomePage(),
     );
   }
-  createDir() async {
-    try {
-      print("Creating directory");
-      // Directory baseDir = await getExternalStorageDirectory(); //only for Android
-      Directory baseDir = await getApplicationDocumentsDirectory(); //works for both iOS and Android
-      String dirToBeCreated = "Digilocker";
-      String finalDir = join(baseDir.toString(), dirToBeCreated);
-      var dir = Directory(finalDir);
-      bool dirExists = await dir.exists();
-      if (!dirExists) {
-        dir
-            .create(/*recursive=true*/); //pass recursive as true if directory is recursive
-      }
-    }
-    catch(e){
-      print ("Directory error"+e.toString());
-    }
-    //Now you can use this directory for saving file, etc.
-    //In case you are using external storage, make sure you have storage permissions.
-  }
+
 }
