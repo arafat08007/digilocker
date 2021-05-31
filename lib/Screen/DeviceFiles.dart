@@ -22,19 +22,20 @@ import 'package:googledriveclone_flutter/deviceexplorer//ui/widgets/context_dial
 import 'package:googledriveclone_flutter/deviceexplorer/helpers/io_extensions.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/ui/widgets/appbar_path_widget.dart';
 
-class FolderListScreen extends StatefulWidget {
-  final String path;
-  const FolderListScreen({@required this.path}) : assert(path != null);
+class DeviceFolderScreen extends StatefulWidget {
+  final String path ;
+   DeviceFolderScreen({@required this.path}) : assert(path == null);
   @override
-  _FolderListScreenState createState() => _FolderListScreenState();
+  _DeviceFolderScreenState createState() => _DeviceFolderScreenState();
 }
 
-class _FolderListScreenState extends State<FolderListScreen>
+class _DeviceFolderScreenState extends State<DeviceFolderScreen>
     with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController;
   @override
   void initState() {
     _scrollController = ScrollController(keepScrollOffset: true);
+
     super.initState();
   }
 
@@ -46,65 +47,20 @@ class _FolderListScreenState extends State<FolderListScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    //super.build(context);
     final preferences = Provider.of<PreferencesNotifier>(context);
     var coreNotifier = Provider.of<CoreNotifier>(context);
     return Scaffold(
-        body: RefreshIndicator(
-          onRefresh: () {
-            return Future.delayed(Duration(milliseconds: 100))
-                .then((_) => setState(() {}));
-          },
+
           // It is better solution for `NestedScrollView` to be wrapped in `RefreshIndicator` widget
-          child: NestedScrollView(
-            headerSliverBuilder: (context, val) => [
-              SliverAppBar(
-                floating: true,
-                leading: BackButton(onPressed: () {
-                  if (coreNotifier.currentPath.absolute.path ==
-                      pathlib.separator) {
-                    Navigator.popUntil(context,
-                        ModalRoute.withName(Navigator.defaultRouteName));
-                  } else {
-                    coreNotifier.navigateBackdward();
-                  }
-                }),
-                actions: <Widget>[
-                  IconButton(
-                    // Go home
-                    onPressed: () {
-                      Navigator.popUntil(context,
-                          ModalRoute.withName(Navigator.defaultRouteName));
-                    },
-                    icon: Icon(Icons.home),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () => showSearch(
-                        context: context, delegate: Search(path: widget.path)),
-                  ),
-                  AppBarPopupMenu(path: coreNotifier.currentPath.absolute.path)
-                ],
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(25),
-                  child: Container(
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.all(4.0),
-                      child: AppBarPathWidget(
-                        onDirectorySelected: (dir) {
-                          coreNotifier.navigateToDirectory(dir.absolute.path);
-                        },
-                        path: coreNotifier.currentPath.absolute.path,
-                      )),
-                ),
-              ),
-            ],
-            body: Consumer<CoreNotifier>(
+          body: SingleChildScrollView(
+
+            child: Consumer<CoreNotifier>(
               builder: (context, model, child) =>
                   StreamBuilder<List<FileSystemEntity>>(
                     // This function Invoked every time user go back to the previous directory
                     stream: filesystem.fileStream(model.currentPath.absolute.path,
-                        keepHidden: preferences.hidden),
+                        keepHidden: false),
 
                     builder: (BuildContext context,
                         AsyncSnapshot<List<FileSystemEntity>> snapshot) {
@@ -122,7 +78,7 @@ class _FolderListScreenState extends State<FolderListScreen>
                             }
                           } else if (snapshot.data.length != 0) {
                             debugPrint(
-                                "FolderListScreen -> Folder Grid: data length = ${snapshot.data.length} ");
+                                "DeviceFolderScreen -> Folder Grid: data length = ${snapshot.data.length} ");
                             return GridView.builder(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 controller: _scrollController,
@@ -171,10 +127,10 @@ class _FolderListScreenState extends State<FolderListScreen>
                   ),
             ),
           ),
-        ),
+
 
         // check if the in app floating action button is activated in settings
-        floatingActionButton: StreamBuilder<bool>(
+      /*  floatingActionButton: StreamBuilder<bool>(
           stream: preferences.showFloatingButton, //	a	Stream<int>	or	null
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.hasError) return Text('Error:	${snapshot.error}');
@@ -193,7 +149,8 @@ class _FolderListScreenState extends State<FolderListScreen>
             }
             return null;
           },
-        ));
+        )*/
+    );
   }
 
   @override

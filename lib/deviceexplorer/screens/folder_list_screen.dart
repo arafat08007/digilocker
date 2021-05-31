@@ -3,6 +3,7 @@ import 'dart:io';
 
 // framework
 import 'package:flutter/material.dart';
+import 'package:googledriveclone_flutter/Widget/constants.dart';
 
 // packages
 import 'package:open_file/open_file.dart';
@@ -60,7 +61,13 @@ class _FolderListScreenState extends State<FolderListScreen>
             headerSliverBuilder: (context, val) => [
               SliverAppBar(
                 floating: true,
-                leading: BackButton(onPressed: () {
+                elevation: 0,
+                backgroundColor: Colors.white,
+                brightness: Theme.of(context).brightness,
+
+                leading: BackButton(
+                    color: kPrimaryColor,
+                    onPressed: () {
                   if (coreNotifier.currentPath.absolute.path ==
                       pathlib.separator) {
                     Navigator.popUntil(context,
@@ -69,27 +76,23 @@ class _FolderListScreenState extends State<FolderListScreen>
                     coreNotifier.navigateBackdward();
                   }
                 }),
+                title: Text('File Explorer'),
+                centerTitle: true,
                 actions: <Widget>[
+
                   IconButton(
-                    // Go home
-                    onPressed: () {
-                      Navigator.popUntil(context,
-                          ModalRoute.withName(Navigator.defaultRouteName));
-                    },
-                    icon: Icon(Icons.home),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.search),
+                    icon: Icon(Icons.search, color: kPrimaryColor,),
                     onPressed: () => showSearch(
                         context: context, delegate: Search(path: widget.path)),
                   ),
                   AppBarPopupMenu(path: coreNotifier.currentPath.absolute.path)
                 ],
                 bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(25),
+                  preferredSize: Size.fromHeight(20),
                   child: Container(
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.all(4.0),
+                      padding: EdgeInsets.only(left:10,bottom: 5),
                       child: AppBarPathWidget(
                         onDirectorySelected: (dir) {
                           coreNotifier.navigateToDirectory(dir.absolute.path);
@@ -131,7 +134,7 @@ class _FolderListScreenState extends State<FolderListScreen>
                                 left: 10.0, right: 10.0, top: 0),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4),
+                                    crossAxisCount: 3),
                             itemCount: snapshot.data.length,
                             itemBuilder: (context, index) {
                               // folder

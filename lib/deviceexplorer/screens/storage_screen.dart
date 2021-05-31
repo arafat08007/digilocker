@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // framework
+import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/notifiers/core.dart';
 import 'package:flutter/material.dart';
 
@@ -26,8 +27,7 @@ class _StorageScreenState extends State<StorageScreen> {
     var coreNotifier = Provider.of<CoreNotifier>(context, listen: false);
 
     return Scaffold(
-      appBar:
-          AppBar(title: Text("Storages"), actions: <Widget>[AppBarPopupMenu()]),
+
       body: FutureBuilder<List<FileSystemEntity>>(
         future:
             getStorageList(), // a previously-obtained Future<String> or null
@@ -49,11 +49,13 @@ class _StorageScreenState extends State<StorageScreen> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, int position) {
                   return Card(
+                    elevation: 1,
+                    shadowColor: kPrimaryLightColor,
                     child: ListTile(
+                      leading: Icon(Icons.sd_storage_rounded),
+                      trailing: Icon(Icons.arrow_forward_ios_outlined),
                       title: Text(snapshot.data[position].absolute.path),
-                      subtitle: Row(children: [
-                        Text("Size: ${snapshot.data[position].statSync().size}")
-                      ]),
+                      subtitle: Text("Size: ${snapshot.data[position].statSync().size}"),
                       dense: true,
                       onTap: () {
                         coreNotifier.currentPath =

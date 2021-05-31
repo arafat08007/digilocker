@@ -104,6 +104,8 @@ flutter:
     - assets/pdf.png
     - assets/photo.png
     - assets/photographic-film.png
+    - assets/unknown_file_type2.png # source: https://www.iconfinder.com/icons/285688/empty_file_icon
+    - assets/details.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

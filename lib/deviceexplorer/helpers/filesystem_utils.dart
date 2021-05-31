@@ -21,8 +21,9 @@ Future<List<Directory>> getStorageList() async {
   List<Directory> filteredPaths = List<Directory>();
   for (Directory dir in paths) {
     filteredPaths
-        .add(await getExternalStorageWithoutDataDir(dir.absolute.path));
+        .add(await getExternalStorageWithoutDataDir(dir.absolute.path+'/digilocker/'));
   }
+  print(filteredPaths);
   return filteredPaths;
 }
 
