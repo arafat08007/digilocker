@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:googledriveclone_flutter/Models/Files.dart';
+import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:path_provider_ex/path_provider_ex.dart';
 import 'package:googledriveclone_flutter/Widget/smallGrid.dart';
 
@@ -48,87 +49,104 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      child: NestedScrollView(
-        physics: NeverScrollableScrollPhysics(),
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget> [
-            SliverPersistentHeader(
-              delegate: _SliverAppBarDelegate(
-                TabBar(
-                  controller: controller,
-                  labelColor: Color(0xFF1777F2),
-                  indicatorColor: Colors.blue.shade700,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  unselectedLabelColor: Colors.grey,
-                  tabs: [
-                    Tab(text: "My Web Locker",),
-                    Tab(text: "Device",),
-                  ],
+    return Scaffold(
+      body: Container(
+        child: NestedScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget> [
+              SliverPersistentHeader(
+                delegate: _SliverAppBarDelegate(
+                  TabBar(
+                    controller: controller,
+                    labelColor: Color(0xFF1777F2),
+                    indicatorColor: kPrimaryColor,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    unselectedLabelColor: Colors.grey,
+                    tabs: [
+                      Tab(text: "My Web Locker",),
+                      Tab(text: "Device",),
+                    ],
+                  ),
                 ),
+                pinned: true,
               ),
-              pinned: true,
-            ),
-          ];
-        },
-          body: TabBarView(
-            controller: controller,
-            children: [
-              //My web locker
-              Container(
-                child: files.length>0?GridView.builder(
-                  padding: EdgeInsets.all(20),
-                  itemCount: files.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:  2 ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      padding: EdgeInsets.only(top: 20, bottom: 20, left: 20),
-                        child: new SmallGridWIdget(file: files[index],)
-                    );
-                  },
-                ):
+            ];
+          },
+            body: TabBarView(
+              controller: controller,
+              children: [
+                //My web locker
                 Container(
-                  padding: const EdgeInsets.all(15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/notfound.png', width: MediaQuery.of(context).size.width-100,),
-                          Text('Nothing found',style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 22),),
-                        ]
-
-                    )
-                ),
-              ),
-              //My device locker
-              Container(
-                child: devicefile?.length.toString()=="0"?GridView.builder(
-                  //print(devicefile?.length.toString());
-                  padding: EdgeInsets.all(20),
-                  itemCount: devicefile?.length ?? 0,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:  2 ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return  Container(
+                  child: files.length>0?GridView.builder(
+                    padding: EdgeInsets.all(20),
+                    itemCount: files.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:  2 ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
                         padding: EdgeInsets.only(top: 20, bottom: 20, left: 20),
-                        child: SmallGridWIdget(file: devicefile[index],)
-                    );
-                  },
-                ):
-                Container(
+                          child: new SmallGridWIdget(file: files[index],)
+                      );
+                    },
+                  ):
+                  Container(
                     padding: const EdgeInsets.all(15),
-                    child: Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/notfound.png', width: MediaQuery.of(context).size.width-100,),
-                          Text('Nothing found',style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 22),),
-                        ]
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/notfound.png', width: MediaQuery.of(context).size.width-100,),
+                            Text('Nothing found',style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 22),),
+                          ]
 
-                    )
+                      )
+                  ),
                 ),
-              )
-            ],
-          )
+                //My device locker
+
+                Container(
+                  child:devicefile.length>0?
+                      ListView.builder(  //if file/folder list is grabbed, then show here
+                      itemCount: devicefile.length,
+                      itemBuilder: (context, index) {
+                      return Card(
+                      child:ListTile(
+                      title: Text(devicefile[index].toString()),
+                      leading: Icon(Icons.image),
+                      trailing: Icon(Icons.delete, color: Colors.redAccent,),
+                      )
+                      );
+                      },
+                      )
+                 /* devicefile?.length>0?GridView.builder(
+
+                    padding: EdgeInsets.all(20),
+                    itemCount: devicefile?.length ?? 0,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:  2 ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return  Container(
+                          padding: EdgeInsets.only(top: 20, bottom: 20, left: 20),
+                          child: SmallGridWIdget(file: devicefile[index],)
+                      );
+                    },
+                  )*/
+                      :
+                  Container(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/notfound.png', width: MediaQuery.of(context).size.width-100,),
+                            Text('Nothing found',style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 22),),
+                          ]
+
+                      )
+                  ),
+                )
+              ],
+            )
+        ),
       ),
     );
   }
@@ -137,9 +155,10 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
 
     try {
       List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
+      print ('Storage info $storageInfo');
       var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
       var fm = FileManager(root: Directory(root)); //
-      print("Device file calculating" + root.toString());
+      print("Device file path\t" + root.toString());
       devicefile = await fm.filesTree(
         //set fm.dirsTree() for directory/folder tree list
         excludedPaths: ["/storage/emulated/0/Android"],

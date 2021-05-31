@@ -11,9 +11,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var userid = prefs.getString('userid');
-  print("UserID"+userid.toString());
- // runApp(GetMaterialApp( home: MyApp()));
-  runApp(GetMaterialApp(home: (userid.toString().isEmpty) || (userid.toString() == null) ? MyLoginApp() : HomePage()));
+  print("UserID\t"+userid.toString());
+ //runApp(GetMaterialApp( home: MyLoginApp()));
+  runApp(GetMaterialApp(home: ( (userid == null))? MyLoginApp() : HomePage()));
 }
 
 class MyLoginApp extends StatelessWidget {

@@ -20,10 +20,7 @@ import 'package:storage_capacity/storage_capacity.dart';
 import 'IssudFile.dart';
 import 'SharedFile.dart';
 
-void main() {
 
-  runApp(HomePage());
-}
 
 class HomePage extends StatelessWidget {
   // This widget is the root of your application.
@@ -241,13 +238,20 @@ String permissionstatus ="Ok";
                   decoration: InputDecoration(
                       hintText: "Search in locker",
                       border: InputBorder.none,
-                      icon: Container(
+                      prefixIcon: Container(
                           margin: EdgeInsets.only(left: 10),
                           child: Icon(Icons.search, color: kPrimaryColor,)
                       ),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+
+                      },
+                      icon: Icon(Icons.mic),
+                    ),
 
 
                   ),
+
                 ),
               ),
             ),

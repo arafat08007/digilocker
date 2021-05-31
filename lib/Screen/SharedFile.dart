@@ -5,7 +5,7 @@ import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:googledriveclone_flutter/Widget/issued.dart';
 
 import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
+
 import 'dart:async';
 void main() {
   runApp(MySharedDocScreenPage());
@@ -23,9 +23,7 @@ class MySharedDocScreenPage extends StatefulWidget {
 }
 
 class _MySharedDocScreenPageState extends State<MySharedDocScreenPage> {
-  final LocalAuthentication auth = LocalAuthentication();
-  bool _canCheckBiometrics;
-  List<BiometricType> _availableBiometrics;
+
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
   _SupportState _supportState = _SupportState.unknown;
