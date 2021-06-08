@@ -24,7 +24,8 @@ class _profilePageState extends State<profilePage> {
         elevation: 0,
         leading: GestureDetector(
           onTap: (){
-            Get.back();
+            Navigator.popUntil(context,
+                ModalRoute.withName(Navigator.defaultRouteName));
           },
             child: Icon(Icons.arrow_back_outlined,color:kPrimaryColor)),
         backgroundColor: Colors.white,

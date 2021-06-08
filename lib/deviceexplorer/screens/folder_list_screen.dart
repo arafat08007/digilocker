@@ -102,7 +102,8 @@ class _FolderListScreenState extends State<FolderListScreen>
                 ),
               ),
             ],
-            body: Consumer<CoreNotifier>(
+            body:
+            Consumer<CoreNotifier>(
               builder: (context, model, child) =>
                   StreamBuilder<List<FileSystemEntity>>(
                 // This function Invoked every time user go back to the previous directory

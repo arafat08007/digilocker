@@ -66,8 +66,22 @@ class FolderContextDialog extends StatelessWidget {
                       },
                       child: ListTile(
                           leading: Icon(Icons.delete), title: Text('Delete'))),
-
-                  //...
+               /*
+                  SimpleDialogOption(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        model.copyFile(path);
+                      },
+                      child: ListTile(
+                          leading: Icon(Icons.copy), title: Text('Copy file'))),
+                  SimpleDialogOption(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        model.pasteByPath(path);
+                      },
+                      child: ListTile(
+                          leading: Icon(Icons.content_paste), title: Text('Paste file'))),
+                  *///...
                 ],
               ),
             ));

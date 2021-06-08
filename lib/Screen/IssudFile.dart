@@ -52,8 +52,8 @@ class _MyIssuedDocScreenPageState extends State<MyIssuedDocScreenPage> {
 
         children: [
 
-          if (_supportState == _SupportState.unknown)
-              CircularProgressIndicator( color: kPrimaryLightColor, ),
+          //if (_supportState == _SupportState.unknown)
+          //    CircularProgressIndicator( color: kPrimaryLightColor, ),
           //else if (_supportState == _SupportState.supported)
           //  Text("This device is supported")
         //  else

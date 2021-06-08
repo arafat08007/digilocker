@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:convert';
 
-
+import 'dart:typed_data';
+import 'package:flutter/widgets.dart';
 const kPrimaryColor = Color(0xFF1EA6C6);
 //const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFe7f3f7);
@@ -118,6 +120,18 @@ createDir() async {
   }
   //Now you can use this directory for saving file, etc.
   //In case you are using external storage, make sure you have storage permissions.
+}
+//Base64 image
+Image imageFromBase64String(String base64String) {
+  return Image.memory(base64Decode(base64String));
+}
+
+Uint8List dataFromBase64String(String base64String) {
+  return base64Decode(base64String);
+}
+
+String base64String(Uint8List data) {
+  return base64Encode(data);
 }
 
 Future<bool> _checkStoragePermission() async {

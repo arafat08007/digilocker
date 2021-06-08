@@ -1,9 +1,12 @@
 
-import 'package:fab_circular_menu/fab_circular_menu.dart';
-//import 'package:file_picker/file_picker.dart';
+
+
+
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_document_picker/flutter_document_picker.dart';
 
 import 'package:get/get.dart';
 import 'package:googledriveclone_flutter/Screen/Files.dart';
@@ -11,14 +14,18 @@ import 'package:googledriveclone_flutter/Screen/HomeScreen.dart';
 import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
 import 'package:googledriveclone_flutter/Screen/Profile.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
+import 'package:googledriveclone_flutter/components/DocumentPicker.dart';
+import 'package:googledriveclone_flutter/deviceexplorer/notifiers/core.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:prompt_dialog/prompt_dialog.dart';
+
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sk_alert_dialog/sk_alert_dialog.dart';
 import 'package:storage_capacity/storage_capacity.dart';
 
 import 'IssudFile.dart';
 import 'SharedFile.dart';
+import 'package:googledriveclone_flutter/deviceexplorer/helpers/filesystem_utils.dart' as filesystem;
 
 
 
@@ -66,9 +73,17 @@ String permissionstatus ="Ok";
   bool isFolder;
   double _diskSpace = 0;
   String _freespace ="0" ;
-  String _freespacemb ="0" ;
-  String _occupiedSpace ="0";
+  String  _occupiedSpace ="0";
   String _totalSpace="0";
+
+  String fileName;
+  String fpath;
+  Map<String, String> fpaths;
+  List<String> extensions;
+  bool isLoadingPath = false;
+  bool isMultiPick = false;
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -83,6 +98,7 @@ String permissionstatus ="Ok";
 
     super.initState();
   }
+
 
   @override
   void dispose() {
@@ -111,6 +127,7 @@ String permissionstatus ="Ok";
   }
   @override
   Widget build(BuildContext context) {
+    var coreNotifier = Provider.of<CoreNotifier>(context);
 
     return Scaffold(
       key: scaffoldKey,
@@ -144,7 +161,12 @@ String permissionstatus ="Ok";
               title: Text('My profile'),
               onTap: () {
                 // Get.back();
-                Get.to(profilePage());
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => profilePage()
+                    )
+                );
 
               },
             ),
@@ -158,7 +180,7 @@ String permissionstatus ="Ok";
                 // Get.back();
                // checkpermission;
                 checkpermission(context);
-                _showMyDialog();
+                _showMyDialog(coreNotifier.currentPath.absolute.path);
               },
             ),
 
@@ -168,6 +190,7 @@ String permissionstatus ="Ok";
               onTap: () {
                 // Get.back();
                 checkpermission(context);
+
                 _openFileType(context);
 
               },
@@ -186,7 +209,7 @@ String permissionstatus ="Ok";
               title: Text('History'),
               onTap: () {
                 // Get.back();
-                _showMyDialog();
+                _showMyDialog(coreNotifier.currentPath.absolute.path);
               },
             ),
             Divider(),
@@ -209,7 +232,23 @@ String permissionstatus ="Ok";
                 //SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs= await SharedPreferences.getInstance();
                 prefs.remove('userid');
-                Get.offAll(LoginPage());
+               // Get.offAll(LoginPage());
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
+                        Animation secondaryAnimation) {
+                      return LoginPage();
+                    }, transitionsBuilder: (BuildContext context, Animation<double> animation,
+                        Animation<double> secondaryAnimation, Widget child) {
+                      return new SlideTransition(
+                        position: new Tween<Offset>(
+                          begin: const Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    }),
+                        (Route route) => false);
                 //Do some stuff here
                 //Closing programmatically - very less practical use
                 scaffoldKey.currentState.openEndDrawer();
@@ -286,6 +325,13 @@ String permissionstatus ="Ok";
                     ),
                   ),
                 onPressed: () {
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => profilePage()
+                  )
+                  );
                 // do something
                 },
               )
@@ -338,11 +384,11 @@ String permissionstatus ="Ok";
             bubbleColor : Colors.white.withOpacity(0.9),
             titleStyle:TextStyle(fontSize: 16 , color: kPrimaryColor),
             onPress: ()  {
-              _animationController.reverse();       
-              
-              checkpermission(context);          
-              _showMyDialog();                //_showErrorDialog();
-      
+              _animationController.reverse();
+
+              checkpermission(context);
+              _showMyDialog(coreNotifier.currentPath.absolute.path);                //_showErrorDialog();
+
             },
           ),
           //Floating action menu item
@@ -397,7 +443,7 @@ String permissionstatus ="Ok";
 
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> _showMyDialog(String path) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -431,10 +477,13 @@ String permissionstatus ="Ok";
               child: Text('Create', style: TextStyle(color: kPrimaryColor),),
               onPressed: () {
                 createFolder(context, scaffoldKey, _foldername.text.toString()) ;
-                Get.back();
+
+                filesystem.createFolderByPath(path, folderName: _foldername.text.toString());
+
+                Navigator.of(context).pop();
 
                 //Navigator.of(context).pop();
-               // _animationController.reverse();
+                _animationController.reverse();
               },
             ),
           ],
@@ -480,8 +529,16 @@ String permissionstatus ="Ok";
         print('Cancel Button Tapped');
         Navigator.of(context).pop(false);
       },
-      onRadioButtonSelection: (value) {
+      onRadioButtonSelection: (value) async {
         print('onRadioButtonSelection $value');
+       // filesystem.uploadFile();
+        //With parameters:
+        FlutterDocumentPickerParams params = FlutterDocumentPickerParams(
+          invalidFileNameSymbols: ['/'],
+        );
+        final path = await FlutterDocumentPicker.openDocument(params: params);
+        print ('selected file \t $path');
+
       },
     );
   }

@@ -49,10 +49,11 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: 1,),
 
                   Text('Access & Share your documents anytime anywhere  ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: kPrimaryColor.withOpacity(0.7))),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
 
-                  Text('Login', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kPrimaryColor)),
+                  Divider(height: 20, color: kPrimaryLightColor,),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                  Text('Login', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kPrimaryColor)),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   RoundedInputField(
                     icon: Icons.person,
                     isEnable: !_login_controller.loginProcess.value,
@@ -112,7 +113,22 @@ class LoginPage extends StatelessWidget {
                             //  title: "Oop!", middleText: error);
                           } else {
 
-                            Get.offAll(HomePage());
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
+                                    Animation secondaryAnimation) {
+                                  return HomePage();
+                                }, transitionsBuilder: (BuildContext context, Animation<double> animation,
+                                    Animation<double> secondaryAnimation, Widget child) {
+                                  return new SlideTransition(
+                                    position: new Tween<Offset>(
+                                      begin: const Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                }),
+                                    (Route route) => false);
                           }
                         }
                       }
@@ -139,7 +155,22 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   AlreadyHaveAnAccountCheck(
                     press: () {
-                      Get.to(SignUpScreen());
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
+                              Animation secondaryAnimation) {
+                            return SignUpScreen();
+                          }, transitionsBuilder: (BuildContext context, Animation<double> animation,
+                              Animation<double> secondaryAnimation, Widget child) {
+                            return new SlideTransition(
+                              position: new Tween<Offset>(
+                                begin: const Offset(1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            );
+                          }),
+                              (Route route) => false);
 
                     },
                   ),

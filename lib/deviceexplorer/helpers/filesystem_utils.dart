@@ -9,7 +9,6 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart' as pathlib;
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
-
 // local files
 import 'package:googledriveclone_flutter/deviceexplorer/helpers/io_extensions.dart';
 
@@ -21,7 +20,7 @@ Future<List<Directory>> getStorageList() async {
   List<Directory> filteredPaths = List<Directory>();
   for (Directory dir in paths) {
     filteredPaths
-        .add(await getExternalStorageWithoutDataDir(dir.absolute.path+'/digilocker/'));
+        .add(await getExternalStorageWithoutDataDir(dir.absolute.path));
   }
   print(filteredPaths);
   return filteredPaths;
@@ -226,3 +225,4 @@ Future<List<FileSystemEntity>> sort(List<FileSystemEntity> elements, Sorting by,
     return [];
   }
 }
+//upload file

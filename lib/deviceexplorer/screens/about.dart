@@ -35,7 +35,7 @@ class _AboutScreenState extends State<AboutScreen>
                     child: TabBar(
                       tabs: <Tab>[
                         new Tab(
-                          text: "Donate",
+                          text: "Credit",
                         ),
                       ],
                       controller: _tabController,
@@ -47,9 +47,8 @@ class _AboutScreenState extends State<AboutScreen>
 }
 
 class Donate extends StatelessWidget {
-  final String paypal = "https://www.paypal.me/eagle6789";
-  final String bitcoin = "1AP6bypSaFt7ptFydmjuWWWS8a9MCWRt3m";
-  final String paypalEmail = "me49544@gmail.com";
+  final String mainwebiste = "https://digilocker.mygov.bd/";
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +57,10 @@ class Donate extends StatelessWidget {
             children: <Widget>[
               ListTile(
                 title: Text(
-                  "Paypal me",
+                  "Website",
                 ),
                 subtitle: Column(children: [
-                  Text("$paypal"),
+                  Text("$mainwebiste"),
                   IconButton(
                     onPressed: () {
                       _launchURL();
@@ -71,50 +70,14 @@ class Donate extends StatelessWidget {
                 ]),
               ),
               Divider(),
-              ListTile(
-                title: Text(
-                  "Paypal account",
-                ),
-                subtitle: Column(children: [
-                  Text("$paypalEmail"),
-                  IconButton(
-                    onPressed: () {
-                      Clipboard.setData(new ClipboardData(text: paypalEmail));
 
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text("Copied email address: $paypalEmail")));
-                    },
-                    icon: Icon(Icons.content_copy),
-                  )
-                ]),
-              ),
-              Divider(),
-              ListTile(
-                  title: Text(
-                    "Bitcoin",
-                  ),
-                  subtitle: Column(
-                    children: [
-                      Text("$bitcoin"),
-                      IconButton(
-                        onPressed: () {
-                          Clipboard.setData(new ClipboardData(text: bitcoin));
-
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text("Copied bitcoin address: $bitcoin")));
-                        },
-                        icon: Icon(Icons.content_copy),
-                      )
-                    ],
-                  ))
             ],
           ),
     );
   }
 
   _launchURL() async {
-    const url = 'https://www.paypal.me/eagle6789';
+    const url = 'https://digilocker.mygov.bd/';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

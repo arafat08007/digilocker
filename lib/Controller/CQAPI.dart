@@ -91,6 +91,7 @@ class CQAPI {
 
   static Future<List> loginRequest({token, String mobile, String password}) async {
     var userid;
+   // List<LoginUser> UserDetails = List<LoginUser>();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       print("Token\t $token \t mobile \t $mobile \t pass\t $password");
@@ -113,12 +114,19 @@ class CQAPI {
           userid = loginRes.data.id;
           print(loginRes.toString());
           prefs.setString("userid", ""+loginRes.data.id);
+
+
           return [
+
             loginRes.data.id,
             loginRes.data.email,
             loginRes.data.name,
             loginRes.data.mobile,
             loginRes.data.nid,
+            loginRes.data.photo,
+            loginRes.data.passport,
+            loginRes.data.fatherName,
+            loginRes.data.motherName,
 
           ];
         //  prefs.setString("id", ""+loginRes.data.id);

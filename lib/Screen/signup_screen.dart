@@ -75,7 +75,22 @@ class SignUpScreen extends StatelessWidget {
                 AlreadyHaveAnAccountCheck(
                   login: false,
                   press: () {
-                    Get.to(LoginPage());
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
+                            Animation secondaryAnimation) {
+                          return LoginPage();
+                        }, transitionsBuilder: (BuildContext context, Animation<double> animation,
+                            Animation<double> secondaryAnimation, Widget child) {
+                          return new SlideTransition(
+                            position: new Tween<Offset>(
+                              begin: const Offset(1.0, 0.0),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: child,
+                          );
+                        }),
+                            (Route route) => false);
                   },
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.03),

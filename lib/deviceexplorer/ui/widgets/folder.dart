@@ -1,5 +1,6 @@
 // framework
 import 'package:flutter/material.dart';
+import 'package:googledriveclone_flutter/Widget/constants.dart';
 
 // app
 import 'package:googledriveclone_flutter/deviceexplorer/screens/folder_list_screen.dart';
@@ -10,8 +11,9 @@ import 'package:provider/provider.dart';
 class FolderWidget extends StatelessWidget {
   final String path;
   final String name;
+  final String colorname;
 
-  const FolderWidget({@required this.path, @required this.name});
+  const FolderWidget({@required this.path, @required this.name, this.colorname});
   @override
   Widget build(BuildContext context) {
     var coreNotifier = Provider.of<CoreNotifier>(context, listen: false);
@@ -29,6 +31,7 @@ class FolderWidget extends StatelessWidget {
             builder: (context) => FolderContextDialog(
                   path: path,
                   name: name,
+
                 ));
       },
       child:
@@ -36,6 +39,7 @@ class FolderWidget extends StatelessWidget {
         Icon(
           Icons.folder,
           size: 50.0,
+          color: kPrimaryColor,
         ),
         Text(
           name,

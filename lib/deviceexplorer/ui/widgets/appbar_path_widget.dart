@@ -28,9 +28,13 @@ class AppBarPathWidget extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       reverse: true,
       child: Row(
-          children: filesystem.splitPathToDirectories(path).map((splittedPath) {
+
+          children:
+          filesystem.splitPathToDirectories(path).map((splittedPath) {
         if (splittedPath.absolute.path == pathlib.separator) {
           return PathBarItem(
+            Icon: Icon(Icons.sd_storage_rounded,color: Colors.black54,),
+            style: TextStyle(color: Colors.grey),
               onTap: () {
                 onDirectorySelected(Directory("/"));
                 print(splittedPath);
@@ -38,6 +42,7 @@ class AppBarPathWidget extends StatelessWidget {
               path: pathlib.separator);
         } else {
           return PathBarItem(
+            style: TextStyle(color: Colors.grey),
             onTap: () {
               onDirectorySelected(splittedPath);
               print(splittedPath);
@@ -55,8 +60,9 @@ class PathBarItem extends StatefulWidget {
   final String path;
   final TextStyle style;
   final onTap;
+  final Icon;
 
-  const PathBarItem({Key key, @required this.path, this.style, this.onTap})
+  const PathBarItem({Key key, @required this.path, this.style, this.onTap, this.Icon})
       : super(key: key);
 
   @override

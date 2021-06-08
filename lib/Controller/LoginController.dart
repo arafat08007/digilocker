@@ -14,10 +14,16 @@ class LoginController extends GetxController {
       loginProcess(true);
       List loginResp = await CQAPI.createtoken(mobile: mobile, password: password);
       print('Login api response: '+loginResp.toString());
-      if (loginResp[0] != "") {
+      if (loginResp.length>0) {
         //success
         final prefs = await SharedPreferences.getInstance();
         prefs.setString("id", loginResp[0]);
+      //  prefs.setString("photo", loginResp[14]);
+        print('image response'+loginResp[5]);
+
+
+
+
       } else {
         error = loginResp[1];
       }

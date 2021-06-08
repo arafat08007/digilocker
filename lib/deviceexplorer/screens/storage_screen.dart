@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // framework
+import 'package:googledriveclone_flutter/Screen/DeviceFiles.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/notifiers/core.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class _StorageScreenState extends State<StorageScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => FolderListScreen(
+                                builder: (context) => MyDeviceFile(
                                     path: snapshot
                                         .data[position].absolute.path)));
                       },
