@@ -156,16 +156,7 @@ class _MyDeviceFileState extends State<MyDeviceFile> with TickerProviderStateMix
         ),
         iconTheme: IconThemeData(color: kPrimaryColor),
         actions: <Widget>[
-          IconButton(
-            onPressed: (){
-              print("Sync started");
-              showSnackMessage(context,"Sync Started please wait...", sscaffoldKey,'');
-            },
-            icon: Icon(
-              Icons.sync,
-              color:kPrimaryColor,
-            ),
-          ),
+
           IconButton(
             icon: Container(
               height: 50,

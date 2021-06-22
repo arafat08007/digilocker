@@ -16,6 +16,7 @@ import 'package:googledriveclone_flutter/Screen/Profile.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:googledriveclone_flutter/components/DocumentPicker.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/notifiers/core.dart';
+import 'package:googledriveclone_flutter/deviceexplorer/ui/widgets/appbar_popup_menu.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:provider/provider.dart';
@@ -298,16 +299,7 @@ String permissionstatus ="Ok";
       ),
         iconTheme: IconThemeData(color: kPrimaryColor),
         actions: <Widget>[
-          IconButton(
-            onPressed: (){
-              print("Sync started");
-              showSnackMessage(context,"Sync Started please wait...", scaffoldKey,'');
-            },
-            icon: Icon(
-            Icons.sync,
-            color:kPrimaryColor,
-          ),
-          ),
+
               IconButton(
                   icon: Container(
                     height: 50,
@@ -334,7 +326,8 @@ String permissionstatus ="Ok";
                   );
                 // do something
                 },
-              )
+              ),
+          AppBarPopupMenu(path: coreNotifier.currentPath.absolute.path)
         ],
 
       ),
