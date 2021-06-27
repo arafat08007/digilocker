@@ -14,6 +14,7 @@ import 'package:googledriveclone_flutter/Screen/HomeScreen.dart';
 import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
 import 'package:googledriveclone_flutter/Screen/Profile.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
+import 'package:googledriveclone_flutter/Widget/quick_view.dart';
 import 'package:googledriveclone_flutter/components/DocumentPicker.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/notifiers/core.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/ui/widgets/appbar_popup_menu.dart';
@@ -43,7 +44,7 @@ class HomePage extends StatelessWidget {
 
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage(title: 'Digilocker'),
+        home: MyHomePage(),
       );
     }
     catch(e){
@@ -53,36 +54,33 @@ class HomePage extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
+//  final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
-  SharedPreferences prefs ;
-  Widget _widgetBody = HomeScreen();
-  int _currrentIndex = 0;
-  Animation<double> _animation;
-  AnimationController _animationController;
-  TextEditingController _foldername = TextEditingController();
-String permissionstatus ="Ok";
-
-  String _fileName;
-
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isFolder;
-  double _diskSpace = 0;
-  String _freespace ="0" ;
-  String  _occupiedSpace ="0";
-  String _totalSpace="0";
-
-  String fileName;
-  String fpath;
-  Map<String, String> fpaths;
-  List<String> extensions;
-  bool isLoadingPath = false;
-  bool isMultiPick = false;
+    SharedPreferences prefs ;
+    Widget _widgetBody = HomeScreen();
+    int _currrentIndex = 0;
+    Animation<double> _animation;
+    AnimationController _animationController;
+    TextEditingController _foldername = TextEditingController();
+    String permissionstatus ="Ok";
+    String _fileName;
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+    bool isFolder;
+    double _diskSpace = 0;
+    String _freespace ="0" ;
+    String  _occupiedSpace ="0";
+    String _totalSpace="0";
+    String fileName;
+    String fpath;
+    Map<String, String> fpaths;
+    List<String> extensions;
+    bool isLoadingPath = false;
+    bool isMultiPick = false;
 
 
   @override
@@ -331,20 +329,29 @@ String permissionstatus ="Ok";
         ],
 
       ),
+//body -------------------------------------------
 
       body: SafeArea(
 
-       child:  Container(
-            padding: EdgeInsets.all(15.0),
-              child: FutureBuilder(
-                future: _getStorgeInfo(),
-                builder: (context, snapshot){
-                  if(snapshot.connectionState!=ConnectionState.done) return CircularProgressIndicator();
-                    return _widgetBody;
+       child:  Column(
 
-                },
-              )
-          ),
+         children:[
+           quickNav(),
+           Expanded(
+             child: Container(
+                padding: EdgeInsets.all(15.0),
+                  child: FutureBuilder(
+                    future: _getStorgeInfo(),
+                    builder: (context, snapshot){
+                      if(snapshot.connectionState!=ConnectionState.done) return CircularProgressIndicator();
+                        return _widgetBody;
+
+                    },
+                  )
+              ),
+           ),
+      ]
+       ),
 
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

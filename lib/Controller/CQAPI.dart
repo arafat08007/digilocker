@@ -5,18 +5,19 @@ import 'dart:convert';
 import 'package:googledriveclone_flutter/Models/ErrorResp.dart';
 import 'package:googledriveclone_flutter/Models/LoginTokenCreate.dart';
 import 'package:googledriveclone_flutter/Models/Loginapi.dart';
+import 'package:googledriveclone_flutter/services/AppApi.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CQAPI {
   static var client = http.Client();
-  static var _baseURL = "https://idp-api.eksheba.gov.bd";
+  //static var AppApi.BASE_API = "https://idp-api.eksheba.gov.bd";
 
   static Future<List> refreshToken({String token}) async {
     try {
-      print(_baseURL);
+      print(AppApi.BASE_API);
       var response =
-      await client.post('$_baseURL/auth/refresh', headers: <String, String>{
+      await client.post('$AppApi.BASE_API/auth/refresh', headers: <String, String>{
         'Authorization': 'Bearer $token',
       });
 
@@ -50,9 +51,9 @@ class CQAPI {
 
   static Future<List> createtoken( {String mobile, String password}) async {
     var token;
-    print(_baseURL);
+    print(AppApi.BASE_API);
     try {
-      var response = await client.post('$_baseURL/token/create',
+      var response = await client.post('$AppApi.BASE_API/token/create',
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -95,7 +96,7 @@ class CQAPI {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       print("Token\t $token \t mobile \t $mobile \t pass\t $password");
-      var response = await client.post('$_baseURL/user/login',
+      var response = await client.post('$AppApi.BASE_API/user/login',
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

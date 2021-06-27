@@ -41,6 +41,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
 
         Expanded(
         child: ListView.builder(
+            scrollDirection: Axis.vertical,
             itemCount: recents.length,
             itemBuilder: (context, index){
               return Container(
