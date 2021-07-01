@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var userid = prefs.getString('userid');
+  var userid = prefs.getString('userpic');
   print("UserID\t"+userid.toString());
  //runApp(GetMaterialApp( home: MyLoginApp()));
   runApp(MultiProvider(

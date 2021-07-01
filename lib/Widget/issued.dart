@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:googledriveclone_flutter/Models/Issued.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 
@@ -45,6 +46,7 @@ class _IssuedWidgetPageState extends State<IssuedWidgetPage> {
                 children: [
                   Container(
                     child: Row(
+
                       children: [
                         Container(
                             height: 25,
@@ -57,15 +59,23 @@ class _IssuedWidgetPageState extends State<IssuedWidgetPage> {
                             child: Text(widget.issued.fileName, style: TextStyle(fontSize: 14), maxLines: 2,
                               overflow: TextOverflow.ellipsis,)
                         ),
+                      //  SizedBox(width: 30,),
+                       // fileImage(widget.issued.docmenttype),
                         SizedBox(width: 30,),
-                        fileImage(widget.issued.docmenttype),
+                        Container(
+                          padding: const EdgeInsets.all(5),
+
+                            child: widget.issued.isVarified? Icon(FontAwesomeIcons.markdown, color: kPrimaryColor, size: 16,):Text('')
+                        ),
                         //Text(widget.issued.docmenttype, style: TextStyle(fontSize: 10, color: Colors.grey),),
                       ],
                     ),
                   ),
+
                   Container(
                     child: Icon(Icons.more_vert),
                   ),
+
                 ],
               ),
               Container(

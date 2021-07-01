@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:ui';
 
+import 'dart:typed_data';
+import 'package:flutter/widgets.dart';
 //import 'package:LoginGetX/Model/ErrorResp.dart';
 //import 'package:LoginGetX/Model/LoginResp.dart';
 import 'package:googledriveclone_flutter/Models/ErrorResp.dart';
@@ -17,7 +20,7 @@ class CQAPI {
     try {
       print(AppApi.BASE_API);
       var response =
-      await client.post('$AppApi.BASE_API/auth/refresh', headers: <String, String>{
+      await client.post(AppApi.BASE_API+'/auth/refresh', headers: <String, String>{
         'Authorization': 'Bearer $token',
       });
 
@@ -53,7 +56,7 @@ class CQAPI {
     var token;
     print(AppApi.BASE_API);
     try {
-      var response = await client.post('$AppApi.BASE_API/token/create',
+      var response = await client.post(AppApi.BASE_API+'/token/create',
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -91,12 +94,12 @@ class CQAPI {
   }
 
   static Future<List> loginRequest({token, String mobile, String password}) async {
-    var userid;
+    var userid, userpic;
    // List<LoginUser> UserDetails = List<LoginUser>();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       print("Token\t $token \t mobile \t $mobile \t pass\t $password");
-      var response = await client.post('$AppApi.BASE_API/user/login',
+      var response = await client.post(AppApi.BASE_API+'/user/login',
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -114,7 +117,14 @@ class CQAPI {
         if (loginRes != null) {
           userid = loginRes.data.id;
           print(loginRes.toString());
+
           prefs.setString("userid", ""+loginRes.data.id);
+          prefs.setString("userpic", ""+loginRes.data.photo);
+
+          userpic = imageFromBase64String(loginRes.data.photo);
+          print('USER_PIC\t'+userpic);
+
+
 
 
           return [
@@ -149,4 +159,16 @@ class CQAPI {
     }
   }
 
+}
+
+Image imageFromBase64String(String base64String) {
+  return Image.memory(base64Decode(base64String));
+}
+
+Uint8List dataFromBase64String(String base64String) {
+  return base64Decode(base64String);
+}
+
+String base64String(Uint8List data) {
+  return base64Encode(data);
 }

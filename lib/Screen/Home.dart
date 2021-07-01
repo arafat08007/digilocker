@@ -1,19 +1,18 @@
 
-
-
-
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
-import 'package:googledriveclone_flutter/Screen/Files.dart';
+import 'package:googledriveclone_flutter/Screen/MyDriveScreen.dart';
 import 'package:googledriveclone_flutter/Screen/HomeScreen.dart';
 import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
 import 'package:googledriveclone_flutter/Screen/Profile.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
+import 'package:googledriveclone_flutter/Widget/home_tab_menu.dart';
 import 'package:googledriveclone_flutter/Widget/quick_view.dart';
 import 'package:googledriveclone_flutter/components/DocumentPicker.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/notifiers/core.dart';
@@ -67,34 +66,32 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
     Animation<double> _animation;
     AnimationController _animationController;
     TextEditingController _foldername = TextEditingController();
+    TabController _tabController;
     String permissionstatus ="Ok";
     String _fileName;
     var scaffoldKey = GlobalKey<ScaffoldState>();
     bool isFolder;
     double _diskSpace = 0;
     String _freespace ="0" ;
-    String  _occupiedSpace ="0";
-    String _totalSpace="0";
+
     String fileName;
     String fpath;
     Map<String, String> fpaths;
     List<String> extensions;
     bool isLoadingPath = false;
     bool isMultiPick = false;
+    var ScreenName ;
+    //speech recognitation ====
 
 
   @override
-  void initState() {
+  Future<void> initState()  {
     // TODO: implement initState
     print('Home page loading');
-  //  _controller.addListener(() => _extension = _controller.text);
-    createDir();
+  //  createDir();
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300),);
-    //_getStorgeInfo();
     final curvedAnimation = CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
-  //  initDiskSpace();
-
     super.initState();
   }
 
@@ -108,18 +105,24 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
     setState(() {
       if(index == 0){
         _currrentIndex = index;
+        ScreenName ='homepage';
         _widgetBody = HomeScreen();
+        //print()
       }
       else if(index == 1){
         _currrentIndex = index;
+        ScreenName ='issuedpage';
         _widgetBody = MyIssuedDocScreenPage();
+
       }
       else if(index == 2){
         _currrentIndex = index;
+        ScreenName ='sharedpage';
         _widgetBody = MySharedDocScreenPage();
       }
       else if(index == 3){
         _currrentIndex = index;
+        ScreenName ='mydrivepage';
         _widgetBody = MyDriveScreen();
       }
     });
@@ -127,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     var coreNotifier = Provider.of<CoreNotifier>(context);
-
+    //var user_pic = prefs.getString('userpic');
     return Scaffold(
       key: scaffoldKey,
       endDrawerEnableOpenDragGesture: false, // This way it will not open
@@ -282,6 +285,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                       ),
                     suffixIcon: IconButton(
                       onPressed: () {
+                        print ('you press to mic');
 
                       },
                       icon: Icon(Icons.mic),
@@ -297,8 +301,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       ),
         iconTheme: IconThemeData(color: kPrimaryColor),
         actions: <Widget>[
+          IconButton(onPressed: (){}, icon: Icon(Icons.notification_important_outlined, color: kPrimaryColor, size: 22)),
 
-              IconButton(
+          IconButton(
                   icon: Container(
                     height: 50,
                     width: 50,
@@ -310,7 +315,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                     child: CircleAvatar(
                     radius: 14.0,
                     backgroundColor: Colors.grey[200],
-                    backgroundImage: NetworkImage("https://qph.fs.quoracdn.net/main-qimg-11ef692748351829b4629683eff21100.webp"),
+                    backgroundImage:  NetworkImage("https://qph.fs.quoracdn.net/main-qimg-11ef692748351829b4629683eff21100.webp"),
                     ),
                     ),
                   ),
@@ -325,25 +330,28 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                 // do something
                 },
               ),
-          AppBarPopupMenu(path: coreNotifier.currentPath.absolute.path)
+        //  AppBarPopupMenu(path: coreNotifier.currentzPath.absolute.path),
+
         ],
+
 
       ),
 //body -------------------------------------------
+
 
       body: SafeArea(
 
        child:  Column(
 
          children:[
-           quickNav(),
+           //quickNav(),
            Expanded(
              child: Container(
                 padding: EdgeInsets.all(15.0),
                   child: FutureBuilder(
                     future: _getStorgeInfo(),
                     builder: (context, snapshot){
-                      if(snapshot.connectionState!=ConnectionState.done) return CircularProgressIndicator();
+                     // if(snapshot.connectionState!=ConnectionState.done) return CircularProgressIndicator();
                         return _widgetBody;
 
                     },
@@ -357,6 +365,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
       //Init Floating Action Bubble
+
       floatingActionButton: FloatingActionBubble(
         // Menu items
         items: <Bubble>[
@@ -546,8 +555,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
  Future<void> _getStorgeInfo()  async{
    _freespace = await StorageCapacity.getFreeSpace;
    //_freespacemb = await  StorageCapacity.toMegaBytes(double.parse(_freespace.toString()));
-   _occupiedSpace = await StorageCapacity.getOccupiedSpace;
-   _totalSpace = await StorageCapacity.getTotalSpace;
+  // _occupiedSpace = await StorageCapacity.getOccupiedSpace;
+  // _totalSpace = await StorageCapacity.getTotalSpace;
  }
 
 

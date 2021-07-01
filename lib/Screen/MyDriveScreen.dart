@@ -8,6 +8,7 @@ import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:googledriveclone_flutter/Models/Files.dart';
 import 'package:googledriveclone_flutter/Screen/DeviceFiles.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
+import 'package:googledriveclone_flutter/Widget/home_tab_menu.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/screens/storage_screen.dart';
 import 'package:path_provider_ex/path_provider_ex.dart';
 import 'package:googledriveclone_flutter/Widget/smallGrid.dart';
@@ -44,7 +45,7 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
   void initState() {
     //getFiles();
     super.initState();
-    controller = new TabController(length: 2, vsync: this);
+    controller = new TabController(length: choices.length, vsync: this);
   }
 
 
@@ -53,29 +54,49 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
 
     return Scaffold(
       body: Container(
+
         child: NestedScrollView(
           physics: NeverScrollableScrollPhysics(),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget> [
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
+
                   TabBar(
+
                     controller: controller,
-                    labelColor: Color(0xFF1777F2),
+                    labelColor: kPrimaryColor,
                     indicatorColor: kPrimaryColor,
                     indicatorSize: TabBarIndicatorSize.label,
                     unselectedLabelColor: Colors.grey,
-                    tabs: [
-                      Tab(text: "My Web Locker",),
-                      Tab(text: "Device",),
-                    ],
+                   isScrollable: true,
+
+                    tabs: choices.map <Widget>((Choice chioce) {
+                      return Tab (
+                        text: chioce.title,
+                        icon: Icon(chioce.icon),
+                      );
+                    }
+
+                    ).toList(),
                   ),
                 ),
                 pinned: true,
+              //  floating: true,
               ),
             ];
           },
-            body: TabBarView(
+
+          body: TabBarView(
+            controller: controller,
+            children: choices.map((Choice choice ) {
+              return ChoicePage(
+                choice: choice,
+              );
+
+            }).toList(),
+          ),
+         /*   body: TabBarView(
               controller: controller,
               children: [
                 //My web locker
@@ -113,7 +134,7 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
 
 
               ],
-            )
+            )*/
         ),
       ),
     );

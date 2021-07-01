@@ -40,6 +40,7 @@ dependencies:
   flutter_file_manager: ^0.1.1
   folder_file_saver: ^1.0.0+2
   dio: any
+  speech_recognition: "^0.3.0"
   #email_validator: ^1.0.0
   shared_preferences: any
   http: ^0.12.2
