@@ -1,8 +1,13 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:googledriveclone_flutter/Data/Recent.dart';
 import 'package:googledriveclone_flutter/Screen/Home.dart';
+import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:googledriveclone_flutter/Widget/recent.dart';
+import 'package:flutter/gestures.dart';
 
 void main() {
   runApp(HomeScreen());
@@ -26,7 +31,7 @@ class HomeScreenPage extends StatefulWidget {
 }
 
 class _HomeScreenPageState extends State<HomeScreenPage> {
-
+  int touchedIndex = -1;
   @override
   Widget build(BuildContext context) {
 
@@ -36,6 +41,36 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
 
       children: [
+        Container(
+          height: 150,
+          //color: kPrimaryLightColor,
+          child: PieChart(
+           // Optional
+            PieChartData(
+                pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                  setState(() {
+                    final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent &&
+                        pieTouchResponse.touchInput is! PointerUpEvent;
+                    if (desiredTouch && pieTouchResponse.touchedSection != null) {
+                      touchedIndex = pieTouchResponse.touchedSection.touchedSectionIndex;
+                    } else {
+                      touchedIndex = -1;
+                    }
+                  });
+                }),
+                borderData: FlBorderData(
+                  show: false,
+                ),
+                sectionsSpace: 0,
+                centerSpaceRadius: 20,
+                sections: showingSectionsWithImage(),
+             // centerSpaceColor: Colors.black54,
+            ),
+
+            swapAnimationCurve: Curves.ease,
+            swapAnimationDuration: Duration(milliseconds: 150),
+          ),
+        ),
         Text('Recent',style: TextStyle(color: Colors.black54,fontSize: 18, fontWeight: FontWeight.bold),),
         Divider(height: 20,),
 
@@ -50,6 +85,189 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
             }
         ),
       )]
+    );
+  }
+
+  List<PieChartSectionData> showingSections() {
+    return List.generate(4, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 25.0 : 16.0;
+      final radius = isTouched ? 60.0 : 50.0;
+      switch (i) {
+        case 0:
+          return PieChartSectionData(
+            color: const Color(0xff0293ee),
+            value: 40,
+            title: '40%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+          );
+        case 1:
+          return PieChartSectionData(
+            color: const Color(0xfff8b250),
+            value: 30,
+            title: '30%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+          );
+        case 2:
+          return PieChartSectionData(
+            color: const Color(0xff845bef),
+            value: 15,
+            title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+          );
+        case 3:
+          return PieChartSectionData(
+            color: const Color(0xff13d38e),
+            value: 15,
+            title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+          );
+        default:
+          throw Error();
+      }
+    });
+  }
+  List<PieChartSectionData> showingSectionsWithImage() {
+    return List.generate(5, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 12.0 : 10.0;
+      final radius = isTouched ? 60.0 : 50.0;
+      final widgetSize = isTouched ? 25.0 : 30.0;
+
+      switch (i) {
+        case 0:
+          return PieChartSectionData(
+            color: const Color(0xff0293ee),
+            value: 40,
+            title: '40%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+            badgeWidget: _Badge(
+              FontAwesomeIcons.solidFileWord,
+              size: widgetSize,
+              borderColor: const Color(0xff0293ee),
+            ),
+            badgePositionPercentageOffset: .98,
+          );
+        case 1:
+          return PieChartSectionData(
+            color: const Color(0xfff8b250),
+            value: 30,
+            title: '30%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+            badgeWidget: _Badge(
+              FontAwesomeIcons.solidFileExcel,
+              size: widgetSize,
+              borderColor: const Color(0xfff8b250),
+            ),
+            badgePositionPercentageOffset: .98,
+          );
+        case 2:
+          return PieChartSectionData(
+            color: const Color(0xff845bef),
+            value: 10,
+            title: '10%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+            badgeWidget: _Badge(
+              FontAwesomeIcons.solidFileImage,
+              size: widgetSize,
+              borderColor: const Color(0xff845bef),
+            ),
+            badgePositionPercentageOffset: .98,
+          );
+        case 3:
+          return PieChartSectionData(
+            color: const Color(0xff13d38e),
+            value: 10,
+            title: '10%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+            badgeWidget: _Badge(
+              FontAwesomeIcons.solidFilePdf,
+              size: widgetSize,
+              borderColor: const Color(0xff13d38e),
+            ),
+            badgePositionPercentageOffset: .98,
+          );
+        case 4:
+          return PieChartSectionData(
+            color: Colors.white70,
+
+            value: 10,
+            title: '10%',
+
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.black54),
+            badgeWidget: _Badge(
+              FontAwesomeIcons.memory,
+              size: widgetSize,
+              borderColor: Colors.white70,
+            ),
+            badgePositionPercentageOffset: .98,
+          );
+        default:
+
+          throw 'Oh no';
+      }
+    });
+  }
+}
+
+class _Badge extends StatelessWidget {
+  final IconData svgAsset;
+  final double size;
+  final Color borderColor;
+
+  const _Badge(
+      this.svgAsset, {
+        Key key,
+        this.size,
+        this.borderColor,
+      }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: PieChart.defaultDuration,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: borderColor,
+          width: 2,
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withOpacity(.5),
+            offset: const Offset(3, 3),
+            blurRadius: 3,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(size * .15),
+      child: Center(
+        child: Icon(
+          svgAsset,
+          size: 12,
+        ),
+      ),
     );
   }
 }

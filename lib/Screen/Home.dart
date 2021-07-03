@@ -2,28 +2,18 @@
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:get/get.dart';
 import 'package:googledriveclone_flutter/Screen/MyDriveScreen.dart';
 import 'package:googledriveclone_flutter/Screen/HomeScreen.dart';
 import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
 import 'package:googledriveclone_flutter/Screen/Profile.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
-import 'package:googledriveclone_flutter/Widget/home_tab_menu.dart';
-import 'package:googledriveclone_flutter/Widget/quick_view.dart';
-import 'package:googledriveclone_flutter/components/DocumentPicker.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/notifiers/core.dart';
-import 'package:googledriveclone_flutter/deviceexplorer/ui/widgets/appbar_popup_menu.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sk_alert_dialog/sk_alert_dialog.dart';
 import 'package:storage_capacity/storage_capacity.dart';
-
 import 'IssudFile.dart';
 import 'SharedFile.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/helpers/filesystem_utils.dart' as filesystem;
@@ -38,9 +28,12 @@ class HomePage extends StatelessWidget {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Digilocker',
+        showPerformanceOverlay: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
-
+          primaryColor: const Color(0xff262545),
+          primaryColorDark: const Color(0xff201f39),
+          brightness: Brightness.light,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:googledriveclone_flutter/Models/Recent.dart';
 import 'package:googledriveclone_flutter/Screen/Home.dart';
+import 'package:googledriveclone_flutter/Widget/constants.dart';
 
 void main() {
   runApp(RecentWidget());
@@ -34,7 +35,7 @@ class _RecentWidgetPageState extends State<RecentWidgetPage> {
     return Container(
         padding: EdgeInsets.only(left: 10, right: 10),
         child: Container(
-          height: 290,
+          height: 220,
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,14 +62,15 @@ class _RecentWidgetPageState extends State<RecentWidgetPage> {
                       ],
                     ),
                   ),
+                  Container(child: widget.recent.isVarified? Icon(Icons.verified, size: 22, color: kPrimaryColor,):Text('')),
                   Container(
                     child: Icon(Icons.more_vert),
                   ),
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(top: 20),
-                height: 170,
+                margin: EdgeInsets.only(top: 15),
+                height: 100,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.grey[200]
