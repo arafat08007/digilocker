@@ -102,7 +102,8 @@ class _RecentWidgetPageState extends State<RecentWidgetPage> {
 }
 
 
-fileImage(String filename){
+fileImage(String fname){
+  String filename = fname.toLowerCase();
   if(filename == 'docs'){
     return Image.asset("assets/google-docs.png");
   }else if(filename == 'image'){
@@ -116,7 +117,12 @@ fileImage(String filename){
   }
   else if(filename == 'zip'){
     return Icon(Icons.archive, color: Colors.blue);
-  }else{
+  }
+  else if(filename == 'passport'){
+    return Icon(Icons.archive, color: Colors.blue);
+  }
+
+  else{
     return Icon(Icons.wysiwyg_rounded, color: Colors.red,);
   }
 

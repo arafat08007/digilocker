@@ -117,14 +117,11 @@ class CQAPI {
         if (loginRes != null) {
           userid = loginRes.data.id;
           print(loginRes.toString());
-
           prefs.setString("userid", ""+loginRes.data.id);
           prefs.setString("userpic", ""+loginRes.data.photo);
 
-          userpic = imageFromBase64String(loginRes.data.photo);
-          print('USER_PIC\t'+userpic);
-
-
+   //       userpic = imageFromBase64String(loginRes.data.photo);
+    //      print('USER_PIC\t'+userpic);
 
 
           return [

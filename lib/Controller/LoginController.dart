@@ -19,7 +19,7 @@ class LoginController extends GetxController {
         final prefs = await SharedPreferences.getInstance();
         prefs.setString("id", loginResp[0]);
       //  prefs.setString("photo", loginResp[14]);
-        print('image response'+loginResp[5]);
+      //  print('image response'+loginResp[5]);
 
 
 

@@ -18,10 +18,7 @@ class BaseClient {
     } on TimeoutException {
       throw ApiNotRespondingException('Api not responding', url.toString());
     }
-    finally {
-     throw UnAutorizedException (' Unauthorized ',url.toString());
 
-    }
   }
 //post
   Future<dynamic> post(String baseUrl, String api, dynamic payloadObj) async{
