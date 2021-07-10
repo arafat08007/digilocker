@@ -18,21 +18,25 @@ class ConditionalImage {
     else if (filename == 'zip') {
       return Icon(Icons.archive, color: Colors.blue);
     }
-    else if (filename == 'passport') {
-      return Image.asset("assets/passport.png");
+    else if (filename == 'pp') {
+      return Image.asset("assets/passport.png", width: 28, height: 28, alignment: Alignment.center,);
     }
-    else if (filename == 'driving licence') {
-      return Image.asset("assets/drivingl.png");
+    else if (filename == 'drl') {
+      return Image.asset("assets/drivingl.png",width: 28, height: 28, alignment: Alignment.center);
     }
-    else if (filename == 'citizen chartered') {
-      return Image.asset("assets/nid.png");
+    else if (filename == 'cic') {
+      return Image.asset("assets/nid.png",width: 28, height: 28, alignment: Alignment.center);
     }
-    else if (filename == 'educational certificate') {
-      return Image.asset("assets/educert.png");
+    else if (filename == 'edc') {
+      return Image.asset("assets/educert.png",width: 28, height: 28, alignment: Alignment.center);
     }
-    else if (filename == 'medical certificate') {
-      return Image.asset("assets/medcert.png");
+    else if (filename == 'mec') {
+      return Image.asset("assets/medcert.png",width: 28, height: 28, alignment: Alignment.center);
     }
+    else if (filename == 'odo') {
+      return Image.asset("assets/otherdocs.png",width: 28, height: 28, alignment: Alignment.center);
+    }
+
 
     else {
       return Icon(FontAwesomeIcons.file, color: Colors.grey,);

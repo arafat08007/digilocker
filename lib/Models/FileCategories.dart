@@ -14,6 +14,7 @@ class FileCategories {
     this.catid,
     this.catname,
     this.fileNum,
+    this.catShortName,
     this.isIssued,
   });
 
@@ -21,6 +22,7 @@ class FileCategories {
   String catid;
   String catname;
   String fileNum;
+  String catShortName;
   bool isIssued;
 
   factory FileCategories.fromJson(Map<String, dynamic> json) => FileCategories(
@@ -28,6 +30,7 @@ class FileCategories {
     catid: json["catid"],
     catname: json["catname"],
     fileNum: json["file_num"],
+    catShortName: json["cat_short_name"],
     isIssued: json["isIssued"],
   );
 
@@ -36,6 +39,7 @@ class FileCategories {
     "catid": catid,
     "catname": catname,
     "file_num": fileNum,
+    "cat_short_name": catShortName,
     "isIssued": isIssued,
   };
 }

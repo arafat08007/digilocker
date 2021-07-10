@@ -84,7 +84,8 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
 
           Expanded(
             flex: 1,
-            child: GridView.count(
+            child: _catList.length>0?
+            GridView.count(
               scrollDirection: Axis.horizontal,
               crossAxisCount: 2,
               mainAxisSpacing: 0,
@@ -93,50 +94,63 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
                   child: Card(
                       color: Colors.white,
                       shadowColor: kPrimaryLightColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
                       child: InkWell(
                         splashColor: Colors.blue.withAlpha(30),
                         onTap: () {
                           print(_catList[index].catid);
                         },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        child: Stack(
                           children: [
-                            ClipRRect( child: ConditionalImage.ImageFile(_catList[index].catname),),
-                            Container(
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: kPrimaryLightColor,
-                                    border: new Border.all(
-                                        color: Colors.grey.withOpacity(0.3),
-                                        width: 1.0,
-                                        style: BorderStyle.solid)),
-                                child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text(
-                                      _catList[index].fileNum,
-                                      style: TextStyle(
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold),
-                                    ))),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: _catList.length > 0
-                                  ? Text(
-                                      _catList[index].catname,
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.black54),
-                                      maxLines: 2,
-                                      softWrap: true,
-                                    )
-                                  : Text('Nothing found'),
-                            )
-                          ],
+                            Center(
+                              child: ConditionalImage.ImageFile(
+                        _catList[index].catShortName)
+                              ),
+
+                            Positioned(
+                              top: 10,
+                              right: 10,
+                              child: Text(
+                                _catList[index].fileNum,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black.withOpacity(0.5),
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+
+
+
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: _catList.length > 0
+                                      ? Text(
+                                          _catList[index].catname,
+                                          style: TextStyle(
+                                              fontSize: 12, color: Colors.black54),
+                                          maxLines: 2,
+                                          softWrap: true,
+                                          textAlign: TextAlign.center,
+                                        )
+                                      : Text('Nothing found'),
+                                ),
+                              )
+                            ],
+                          ),]
                         ),
                       )),
                 );
               }),
-            ),
+            ): Text(''),
           ),
           SizedBox(
             height: 15,
