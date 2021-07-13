@@ -9,6 +9,7 @@ import 'package:googledriveclone_flutter/Data/Recent.dart';
 import 'package:googledriveclone_flutter/Models/FileCategories.dart';
 import 'package:googledriveclone_flutter/Screen/Home.dart';
 import 'package:googledriveclone_flutter/Widget/ConditionalImage.dart';
+import 'package:googledriveclone_flutter/Widget/CustomDialog.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:googledriveclone_flutter/Widget/recent.dart';
 import 'package:flutter/gestures.dart';
@@ -52,105 +53,74 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /*  Expanded(
-          flex: 1,
-          child: PieChart(
-           // Optional
-            PieChartData(
-                pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                  setState(() {
-                    final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent &&
-                        pieTouchResponse.touchInput is! PointerUpEvent;
-                    if (desiredTouch && pieTouchResponse.touchedSection != null) {
-                      touchedIndex = pieTouchResponse.touchedSection.touchedSectionIndex;
-                    } else {
-                      touchedIndex = -1;
-                    }
-                  });
-                }),
-                borderData: FlBorderData(
-                  show: false,
-                ),
-                sectionsSpace: 0,
-                centerSpaceRadius: 20,
-                sections: showingSectionsWithImage(),
-             // centerSpaceColor: Colors.black54,
-            ),
-
-            swapAnimationCurve: Curves.ease,
-            swapAnimationDuration: Duration(milliseconds: 150),
-          ),
-        ),*/
-
           Expanded(
             flex: 1,
-            child: _catList.length>0?
-            GridView.count(
-              scrollDirection: Axis.horizontal,
-              crossAxisCount: 2,
-              mainAxisSpacing: 0,
-              children: new List<Widget>.generate(_catList.length, (index) {
-                return new GridTile(
-                  child: Card(
-                      color: Colors.white,
-                      shadowColor: kPrimaryLightColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: InkWell(
-                        splashColor: Colors.blue.withAlpha(30),
-                        onTap: () {
-                          print(_catList[index].catid);
-                        },
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: ConditionalImage.ImageFile(
-                        _catList[index].catShortName)
-                              ),
-
-                            Positioned(
-                              top: 10,
-                              right: 10,
-                              child: Text(
-                                _catList[index].fileNum,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic),
-                              ),
+            child: _catList.length > 0
+                ? GridView.count(
+                    scrollDirection: Axis.horizontal,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 0,
+                    primary: false,
+                    children:
+                        new List<Widget>.generate(_catList.length, (index) {
+                      return new GridTile(
+                        child: Card(
+                            color: Colors.white,
+                            elevation: 3,
+                            shadowColor: kPrimaryLightColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
                             ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-
-
-
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: _catList.length > 0
-                                      ? Text(
-                                          _catList[index].catname,
-                                          style: TextStyle(
-                                              fontSize: 12, color: Colors.black54),
-                                          maxLines: 2,
-                                          softWrap: true,
-                                          textAlign: TextAlign.center,
-                                        )
-                                      : Text('Nothing found'),
+                            child: InkWell(
+                              splashColor: Colors.blue.withAlpha(30),
+                              onTap: () {
+                                print(_catList[index].catid);
+                              },
+                              child: Stack(children: [
+                                Center(
+                                    child: ConditionalImage.ImageFile(
+                                        _catList[index].catShortName)),
+                                Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: Text(
+                                    _catList[index].fileNum,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black.withOpacity(0.5),
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),]
-                        ),
-                      )),
-                );
-              }),
-            ): Text(''),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: _catList.length > 0
+                                            ? Text(
+                                                _catList[index].catname,
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.black54),
+                                                maxLines: 2,
+                                                softWrap: true,
+                                                textAlign: TextAlign.center,
+                                              )
+                                            : Text('Nothing found'),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ]),
+                            )),
+                      );
+                    }),
+                  )
+                : Text(''),
           ),
           SizedBox(
             height: 15,
@@ -172,8 +142,17 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
                 itemCount: recents.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    child: RecentWidget(
-                      recent: recents[index],
+                    child: InkWell(
+                      onTap: () {
+                        priviewFile(
+                            recents[index].docid,
+                            recents[index].fileName,
+                            recents[index].fileType,
+                            recents[index].fileImage);
+                      },
+                      child: RecentWidget(
+                        recent: recents[index],
+                      ),
                     ),
                   );
                 }),
@@ -348,11 +327,29 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
         if (values[i] != null) {
           Map<String, dynamic> map = values[i];
           _catList.add(FileCategories.fromJson(map));
-          debugPrint('Category name-------${map['catname']}');
+          debugPrint(
+              'Category name----${map['cat_short_name']}---${map['catname']}');
         }
       }
     }
     return _catList;
+  }
+
+  priviewFile(
+      String docid, String filename, String filetype, String fileImage) {
+    print(docid);
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomDialogBox(
+            docid: docid,
+            title: filename,
+            descriptions:
+                "If you want to view the file please click the PREVIEW button on bottom left",
+            text: "Dismiss",
+            img: Image.network(fileImage,  scale: 0.5,),
+          );
+        });
   }
 }
 

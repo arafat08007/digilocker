@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:googledriveclone_flutter/Models/Recent.dart';
 import 'package:googledriveclone_flutter/Screen/Home.dart';
+import 'package:googledriveclone_flutter/Widget/ConditionalImage.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 
 void main() {
@@ -51,7 +52,7 @@ class _RecentWidgetPageState extends State<RecentWidgetPage> {
                         Container(
                             height: 25,
                             width: 20,
-                            child: fileImage(widget.recent.fileType),
+                            child: ConditionalImage.ImageFile(widget.recent.fileType),
                         ),
                         SizedBox(width: 30,),
                         Container(

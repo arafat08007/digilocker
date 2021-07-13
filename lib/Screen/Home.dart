@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                   crossAxisAlignment: CrossAxisAlignment.center,
 
                   children: [
-                    Image.asset('assets/digi_locker.png', width: 300,),
+                    Image.asset('assets/logo.png', width: 300,),
                    SizedBox(height: 10,),
                     Text('Available space: '+_freespace.toString()+'\t (MB)'),
 

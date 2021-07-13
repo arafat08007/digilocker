@@ -1,3 +1,4 @@
+
 name: googledriveclone_flutter
 description: A new Flutter application.
 
@@ -57,20 +58,24 @@ dependencies:
   share: ^0.6.1+1
   open_file: ^2.1.1
   url_launcher: ^5.2.7
-
   page_transition: ^1.1.0
-
   simple_permissions:
     git:
       url: https://github.com/tq-systems/simple_permissions.git
   package_info: ^0.4.0+12
   esys_flutter_share: ^1.0.2
-  flutter_launcher_icons: ^0.7.4
   #package renamer
   change_app_package_name: ^0.1.3
   #pic chart
   flutter_svg: any
   fl_chart: ^0.36.2
+  flutter_launcher_icons: ^0.8.0
+  flutter_pdfview: ^1.0.4
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
 
 
 
