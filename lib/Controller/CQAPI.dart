@@ -12,9 +12,11 @@ import 'package:googledriveclone_flutter/services/AppApi.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CQAPI {
+ class CQAPI {
   static var client = http.Client();
   //static var AppApi.BASE_API = "https://idp-api.eksheba.gov.bd";
+  static List<LoginUser> _Logindata ;
+
 
   static Future<List> refreshToken({String token}) async {
     try {
@@ -97,6 +99,7 @@ class CQAPI {
     var userid, userpic;
    // List<LoginUser> UserDetails = List<LoginUser>();
     SharedPreferences prefs = await SharedPreferences.getInstance();
+   // _Logindata = Map<String,String>();
     try {
       print("Token\t $token \t mobile \t $mobile \t pass\t $password");
       var response = await client.post(AppApi.BASE_API+'/user/login',
@@ -112,8 +115,8 @@ class CQAPI {
           }));
 
       if (response.statusCode == 200) {
-        var json = response.body;
-        var loginRes = loginUserFromJson(json);
+        var jsonresp = response.body;
+        var loginRes = loginUserFromJson(jsonresp);
         if (loginRes != null) {
           userid = loginRes.data.id;
           print(loginRes.toString());
@@ -122,7 +125,11 @@ class CQAPI {
 
    //       userpic = imageFromBase64String(loginRes.data.photo);
     //      print('USER_PIC\t'+userpic);
-
+         // for (int i = 0; i < jsonresp.length; i++) {
+           _Logindata.add(loginRes);
+          //}
+          debugPrint(
+              '_Logindata----${_Logindata}');
 
           return [
 
@@ -154,6 +161,9 @@ class CQAPI {
     catch(e){
       print("Login request error"+e.toString());
     }
+  }
+  static Future<List> getLoginData () async {
+    return _Logindata;
   }
 
 }

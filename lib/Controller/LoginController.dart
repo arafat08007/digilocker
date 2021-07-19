@@ -1,4 +1,5 @@
 import 'package:get/state_manager.dart';
+import 'package:googledriveclone_flutter/Models/Loginapi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CQAPI.dart';
@@ -7,6 +8,7 @@ import 'CQAPI.dart';
 class LoginController extends GetxController {
   var loginProcess = false.obs;
   var error = "";
+
 
   Future<String> login({String mobile, String password}) async {
     error = "";
