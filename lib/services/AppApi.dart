@@ -4,4 +4,5 @@ class AppApi {
   static const BASE_API ="https://idp-api.eksheba.gov.bd";
   static const FAKE_BASE_API ="http://pantonebd.com";
   static const FAKE_BASE_ENDPOINT="/my_locker_file_cat.json";
+  static const FAKE_BASE_CARD_INFO ="/cardinfo.json";
 }

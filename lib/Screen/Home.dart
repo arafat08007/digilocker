@@ -3,9 +3,12 @@ import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
+import 'package:get/get.dart';
+import 'package:googledriveclone_flutter/Controller/AppController.dart';
 import 'package:googledriveclone_flutter/Screen/MyDriveScreen.dart';
 import 'package:googledriveclone_flutter/Screen/HomeScreen.dart';
 import 'package:googledriveclone_flutter/Screen/LoginPage.dart';
+import 'package:googledriveclone_flutter/Screen/NotificationPage.dart';
 import 'package:googledriveclone_flutter/Screen/Profile.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:googledriveclone_flutter/deviceexplorer/notifiers/core.dart';
@@ -22,10 +25,11 @@ import 'package:googledriveclone_flutter/deviceexplorer/helpers/filesystem_utils
 
 class HomePage extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     try {
-      return MaterialApp(
+      return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Digilocker',
         showPerformanceOverlay: false,
@@ -75,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
     bool isMultiPick = false;
     var ScreenName ;
     //speech recognitation ====
-
+ //   final _Appcontrller = Appcontrller();
 
   @override
   Future<void> initState()  {
@@ -122,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
   }
   @override
   Widget build(BuildContext context) {
-    var coreNotifier = Provider.of<CoreNotifier>(context);
+   // var coreNotifier = Provider.of<CoreNotifier>(context);
     //var user_pic = prefs.getString('userpic');
     return Scaffold(
       key: scaffoldKey,
@@ -175,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                 // Get.back();
                // checkpermission;
                 checkpermission(context);
-                _showMyDialog(coreNotifier.currentPath.absolute.path);
+                //_showMyDialog(coreNotifier.currentPath.absolute.path);
               },
             ),
 
@@ -204,7 +208,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
               title: Text('History'),
               onTap: () {
                 // Get.back();
-                _showMyDialog(coreNotifier.currentPath.absolute.path);
+              //  _showMyDialog(coreNotifier.currentPath.absolute.path);
               },
             ),
             Divider(),
@@ -294,7 +298,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       ),
         iconTheme: IconThemeData(color: kPrimaryColor),
         actions: <Widget>[
-          IconButton(onPressed: (){}, icon: Icon(Icons.notification_important_outlined, color: kPrimaryColor, size: 22)),
+          IconButton(onPressed: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => NotificationPage()
+            ));
+          }, icon: Icon(Icons.notification_important_outlined, color: kPrimaryColor, size: 22)),
 
           IconButton(
                   icon: Container(
@@ -389,7 +399,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
               _animationController.reverse();
 
               checkpermission(context);
-              _showMyDialog(coreNotifier.currentPath.absolute.path);                //_showErrorDialog();
+           ///   _showMyDialog(coreNotifier.currentPath.absolute.path);                //_showErrorDialog();
 
             },
           ),

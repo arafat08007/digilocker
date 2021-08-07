@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
+import 'package:googledriveclone_flutter/Controller/BaseErrorController.dart';
 //import 'package:LoginGetX/Model/ErrorResp.dart';
 //import 'package:LoginGetX/Model/LoginResp.dart';
 import 'package:googledriveclone_flutter/Models/ErrorResp.dart';
@@ -12,7 +13,7 @@ import 'package:googledriveclone_flutter/services/AppApi.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
- class CQAPI {
+ class CQAPI with BaseErrorController {
   static var client = http.Client();
   //static var AppApi.BASE_API = "https://idp-api.eksheba.gov.bd";
   static List<LoginUser> _Logindata ;

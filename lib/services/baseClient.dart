@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class BaseClient {
   //GET
   static const TIME_OUT =30;
-  Future<dynamic> get(String baseUrl, String api) async{
+   Future<dynamic> get(String baseUrl, String api) async{
     var url = Uri.parse(baseUrl+api);
     try {
       var response = await http.get(url).timeout(Duration(seconds:TIME_OUT ));
@@ -21,7 +21,7 @@ class BaseClient {
 
   }
 //post
-  Future<dynamic> post(String baseUrl, String api, dynamic payloadObj) async{
+   Future<dynamic> post(String baseUrl, String api, dynamic payloadObj) async{
     var url = Uri.parse(baseUrl+api);
     var payload = json.decode(payloadObj);
     try {

@@ -16,15 +16,7 @@ Future<void> main() async {
   var userid = prefs.getString('userpic');
   print("UserID\t"+userid.toString());
  //runApp(GetMaterialApp( home: MyLoginApp()));
-  runApp(MultiProvider(
-    providers: [
-
-      ValueListenableProvider(create: (context) => ValueNotifier(true)),
-      ChangeNotifierProvider(create: (context) => CoreNotifier()),
-      ChangeNotifierProvider(create: (context) => PreferencesNotifier()),
-    ],
-    child: ( (userid == null))? MyLoginApp() : HomePage(),
-  ));
+  runApp(( (userid == null))? MyLoginApp():HomePage());
 
   //runApp(GetMaterialApp(home: ( (userid == null))? MyLoginApp() : HomePage()));
 }
@@ -35,7 +27,7 @@ class MyLoginApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Digilocker',
       theme: ThemeData(
