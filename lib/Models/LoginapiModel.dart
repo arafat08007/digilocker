@@ -11,48 +11,24 @@ String loginUserToJson(LoginUser data) => json.encode(data.toJson());
 class LoginUser {
   LoginUser({
     this.status,
-    this.data,
+    this.udata,
   });
 
   String status;
-  Data data;
+  UserData udata;
 
   factory LoginUser.fromJson(Map<String, dynamic> json) => LoginUser(
-    status: json["status"],
-    data: Data.fromJson(json["data"]),
+    status: json["status"] ,
+    udata: UserData.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": udata.toJson(),
   };
 }
 
-class Data {
-  Data({
-    this.id,
-    this.email,
-    this.mobile,
-    this.nid,
-    this.name,
-    this.nameEn,
-    this.motherName,
-    this.motherNameEn,
-    this.fatherName,
-    this.fatherNameEn,
-    this.spouseName,
-    this.spouseNameEn,
-    this.gender,
-    this.dateOfBirth,
-    this.photo,
-    this.nidVerify,
-    this.brn,
-    this.brnVerify,
-    this.passport,
-    this.passportVerify,
-    this.tin,
-    this.tinVerify,
-  });
+class UserData {
 
   String id;
   dynamic email;
@@ -77,7 +53,33 @@ class Data {
   dynamic tin;
   int tinVerify;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  UserData({
+    this.id,
+    this.email,
+    this.mobile,
+    this.nid,
+    this.name,
+    this.nameEn,
+    this.motherName,
+    this.motherNameEn,
+    this.fatherName,
+    this.fatherNameEn,
+    this.spouseName,
+    this.spouseNameEn,
+    this.gender,
+    this.dateOfBirth,
+    this.photo,
+    this.nidVerify,
+    this.brn,
+    this.brnVerify,
+    this.passport,
+    this.passportVerify,
+    this.tin,
+    this.tinVerify,
+  });
+
+
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
     id: json["id"],
     email: json["email"],
     mobile: json["mobile"],

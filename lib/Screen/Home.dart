@@ -25,21 +25,13 @@ import 'package:googledriveclone_flutter/deviceexplorer/helpers/filesystem_utils
 
 class HomePage extends StatelessWidget {
   // This widget is the root of your application.
-
+//GlobalKey hompagekey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     try {
-      return GetMaterialApp(
+      return MaterialApp(
+       // key:hompagekey,
         debugShowCheckedModeBanner: false,
-        title: 'Digilocker',
-        showPerformanceOverlay: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          primaryColor: const Color(0xff262545),
-          primaryColorDark: const Color(0xff201f39),
-          brightness: Brightness.light,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
         home: MyHomePage(),
       );
     }
@@ -231,6 +223,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                 //SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs= await SharedPreferences.getInstance();
                 prefs.remove('userid');
+                prefs.remove('id');
                // Get.offAll(LoginPage());
                   Navigator.pushAndRemoveUntil(
                     context,
@@ -345,6 +338,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       body: SafeArea(
 
        child:  Column(
+       mainAxisSize: MainAxisSize.max,
 
          children:[
            //quickNav(),
@@ -423,6 +417,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
         icon: AnimatedIcons.menu_close,
 
       ),
+
       bottomNavigationBar: BottomNavigationBar(
       currentIndex: _currrentIndex,
       type: BottomNavigationBarType.fixed,
@@ -530,6 +525,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       },
     );
   }
+
+
   void _openFileType(BuildContext context) {
 
     SKAlertDialog.show(

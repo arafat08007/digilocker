@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:googledriveclone_flutter/Controller/LoginController.dart';
+import 'package:googledriveclone_flutter/Controller/AppController.dart';
+
 import 'package:googledriveclone_flutter/Screen/Home.dart';
 import 'package:googledriveclone_flutter/Screen/signup_screen.dart';
+import 'package:googledriveclone_flutter/Widget/CustomDialog.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:googledriveclone_flutter/components/RoundedButton.dart';
 import 'package:googledriveclone_flutter/components/already_have_an_account_acheck.dart';
@@ -21,7 +23,9 @@ class LoginPage extends StatelessWidget {
   TextEditingController _userIdCntrl = TextEditingController();
   TextEditingController _userPassCntrl = TextEditingController();
   final _globalscaffoldKey = GlobalKey<ScaffoldState>();
-  final LoginController _login_controller = Get.put(LoginController());
+ // final LoginController _login_controller = Get.put(LoginController());
+
+  final Appcontroller _myLockerController = Get.put(Appcontroller());
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,8 @@ class LoginPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Image.asset("assets/digi_locker.png" , width: MediaQuery.of(context).size.width-50,),
+                  SizedBox(height: 15,),
+                  Image.asset("assets/logo.png" , width: MediaQuery.of(context).size.width-200,),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
 
                   Text('All Documents in One Place  ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: kPrimaryColor,), ),
@@ -56,7 +61,7 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   RoundedInputField(
                     icon: Icons.person,
-                    isEnable: !_login_controller.loginProcess.value,
+                    isEnable: !_myLockerController.loginProcess.value,
                     simpleinputctrl:_userIdCntrl,
                     hintText: "email / mobile phone / NID",
                     onChanged: (value) {
@@ -64,7 +69,7 @@ class LoginPage extends StatelessWidget {
                     },
                   ),
                   RoundedPasswordField(
-                    isEnable: !_login_controller.loginProcess.value,
+                    isEnable: !_myLockerController.loginProcess.value,
                     simplepassctrl:_userPassCntrl,
                     showhide: true,
                     showhideChanged: (value){
@@ -99,7 +104,7 @@ class LoginPage extends StatelessWidget {
                               "Login in , please wait...",
                               _globalscaffoldKey, '');
 
-                          String error = await _login_controller.login(
+                          String error = await _myLockerController.login(
                               mobile: _userIdCntrl.text.toString(),
                               password: _userPassCntrl.text.toString());
                           print("Login button pressed" + error.toString());
@@ -113,22 +118,11 @@ class LoginPage extends StatelessWidget {
                             //  title: "Oop!", middleText: error);
                           } else {
 
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
-                                    Animation secondaryAnimation) {
-                                  return HomePage();
-                                }, transitionsBuilder: (BuildContext context, Animation<double> animation,
-                                    Animation<double> secondaryAnimation, Widget child) {
-                                  return new SlideTransition(
-                                    position: new Tween<Offset>(
-                                      begin: const Offset(1.0, 0.0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
-                                  );
-                                }),
-                                    (Route route) => false);
+                           // Get.offAll(HomePage());
+                          //  CustomDialogBox(title: 'API response', descriptions: error.toString(),);
+
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                HomePage()), (Route<dynamic> route) => false);
                           }
                         }
                       }

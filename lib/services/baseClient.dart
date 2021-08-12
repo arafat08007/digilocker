@@ -21,11 +21,14 @@ class BaseClient {
 
   }
 //post
-   Future<dynamic> post(String baseUrl, String api, dynamic payloadObj) async{
+  Future<dynamic> Loginpost(String baseUrl, String api, dynamic payloadObj) async{
     var url = Uri.parse(baseUrl+api);
-    var payload = json.decode(payloadObj);
+    var payload = json.encode(payloadObj);
+    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+    // var payload = payloadObj;
     try {
-      var response = await http.post(url, body: payload).timeout(Duration(seconds:TIME_OUT ));
+      var response = await http.post(url,headers:headers, body: payload).timeout(Duration(seconds:TIME_OUT ));
+      //return response.body;
       return _processResponse(response);
       //HttpClient httpClient = new HttpClient();
     }
@@ -34,10 +37,40 @@ class BaseClient {
     } on TimeoutException {
       throw ApiNotRespondingException('Api not responding', url.toString());
     }
-    finally {
+    on UnAutorizedException {
       throw UnAutorizedException (' Unauthorized ',url.toString());
 
+    } catch(e){
+      print('Unknown error '+e.toString());
     }
+
+  }
+
+
+
+   Future<dynamic> post(String baseUrl, String api, dynamic payloadObj) async{
+    var url = Uri.parse(baseUrl+api);
+    var payload = json.encode(payloadObj);
+    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+   // var payload = payloadObj;
+    try {
+      var response = await http.post(url,headers:headers, body: payload).timeout(Duration(seconds:TIME_OUT ));
+      print(response);
+      return _processResponse(response);
+      //HttpClient httpClient = new HttpClient();
+    }
+    on SocketException{
+      throw FetchdataException('No Internet connection', url.toString());
+    } on TimeoutException {
+      throw ApiNotRespondingException('Api not responding', url.toString());
+    }
+    on UnAutorizedException {
+      throw UnAutorizedException (' Unauthorized ',url.toString());
+
+    } catch(e){
+      print('Unknown error '+e.toString());
+    }
+
   }
   //delete
   Future<Map<String, dynamic>> commonDel(String url, Map jsonMap) async{
@@ -57,6 +90,8 @@ class BaseClient {
     switch (response.statusCode) {
       case 200:
         var responseJson = utf8.decode(response.bodyBytes);
+        //var responseJson =response.body;
+        print(responseJson);
         return responseJson;
         break;
       case 400:
@@ -75,6 +110,7 @@ class BaseClient {
     }
 
   }
+
 
   //POST
 

@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var userid = prefs.getString('userpic');
+  var userid = prefs.getString('id');
   print("UserID\t"+userid.toString());
  //runApp(GetMaterialApp( home: MyLoginApp()));
   runApp(( (userid == null))? MyLoginApp():HomePage());
@@ -29,13 +29,16 @@ class MyLoginApp extends StatelessWidget {
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Digilocker',
+      title: 'myLocker',
+      showPerformanceOverlay: false,
       theme: ThemeData(
-        primarySwatch: Colors.green,
-
+        primarySwatch: Colors.blue,
+        primaryColor: const Color(0xff262545),
+        primaryColorDark: const Color(0xff201f39),
+        brightness: Brightness.light,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyLoginPage (title: 'Digilocker'),
+      home: MyLoginPage (title: 'myLocker'),
     );
   }
 }

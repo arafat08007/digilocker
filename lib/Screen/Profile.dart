@@ -5,7 +5,7 @@ import 'package:googledriveclone_flutter/Controller/AppController.dart';
 import 'package:googledriveclone_flutter/Data/vidcardData.dart';
 import 'package:googledriveclone_flutter/Models/CardInfo.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
-import 'package:googledriveclone_flutter/Controller/CQAPI.dart';
+
 
 class profilePage extends StatefulWidget {
   profilePage({Key key, this.title, this.items}) : super(key: key);
