@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:convert';
@@ -23,7 +24,7 @@ Color contentTextColor = Color(0xff868686);
 Color navigationColor = Color(0xFF6751B5);
 Color gradientStartColor = Color(0xFF0050AC);
 Color gradientEndColor = Color(0xFF9354B9);
-
+ final  DateFormat formatter = DateFormat('dd-MM-yyyy');
 
 void showSnackMessage(BuildContext context, String s, GlobalKey<ScaffoldState> scaffoldKey,String type) {
 

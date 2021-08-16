@@ -1,8 +1,13 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:googledriveclone_flutter/Controller/AppController.dart';
+import 'package:googledriveclone_flutter/Models/Files.dart';
 import 'package:googledriveclone_flutter/Screen/HomeScreen.dart';
+import 'package:googledriveclone_flutter/Widget/FileFolder.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
 import 'package:image/image.dart';
 
@@ -30,26 +35,37 @@ const List<Choice> choices = <Choice> [
 
 
 class ChoicePage extends StatelessWidget {
-   ChoicePage({Key key, this.choice}) : super(key: key);
+   ChoicePage({Key key, this.choice, this.staticFiles}) : super(key: key);
   final Choice choice;
-  Widget _widgetBody = HomeScreen();
+  final List<Files> staticFiles;
+
+   final Appcontroller _appcontroller = Get.put(Appcontroller());
 
   @override
   Widget build(BuildContext context) {
     final TextStyle textStyle = Theme.of(context).textTheme.bodyText1;
+    print('legnth ${staticFiles.length}');
     return SingleChildScrollView(
       padding: const EdgeInsets.all(10),
 
-      child: Column(
-      //  mainAxisSize: MainAxisSize.min,
 
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(top: 5),
+        child: staticFiles.length>0 ?
 
-        children: <Widget>[
-               Text(choice.title, style: textStyle,)
-
-        ],
+             StaggeredGridView.countBuilder(
+              crossAxisCount: 2,
+              itemCount: staticFiles.length,
+              crossAxisSpacing: 1,
+              mainAxisSpacing: 1,
+              itemBuilder: (context, index) {
+                return FileFolderTile(staticFiles[index]);
+              },
+              staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+            )
+         : Text(choice.title),
       ),
     );
   }

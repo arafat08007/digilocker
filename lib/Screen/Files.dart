@@ -1,18 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:googledriveclone_flutter/Data/Files.dart';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
-
+import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:googledriveclone_flutter/Models/Files.dart';
-
+import 'package:googledriveclone_flutter/Screen/DeviceFiles.dart';
 import 'package:googledriveclone_flutter/Widget/constants.dart';
-import 'package:googledriveclone_flutter/Widget/home_tab_menu.dart';
-
-import 'package:googledriveclone_flutter/services/AppApi.dart';
-import 'package:googledriveclone_flutter/services/baseClient.dart';
-
+import 'package:googledriveclone_flutter/deviceexplorer/screens/storage_screen.dart';
+import 'package:path_provider_ex/path_provider_ex.dart';
+import 'package:googledriveclone_flutter/Widget/smallGrid.dart';
 
 void main() {
   runApp(MyDriveScreen());
@@ -39,16 +37,14 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
 
   var devicefile;
   final TrackingScrollController scrollController = TrackingScrollController();
-  List<Files> _staticFiles = new List<Files>();
   TabController controller;
   Widget _widgetBody;
 
   @override
   void initState() {
     //getFiles();
-    getFiles(AppApi.FAKE_BASE_API, AppApi.FAKE_FILES);
     super.initState();
-    controller = new TabController(length: choices.length, vsync: this);
+    controller = new TabController(length: 2, vsync: this);
   }
 
 
@@ -57,52 +53,29 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
 
     return Scaffold(
       body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-
         child: NestedScrollView(
           physics: NeverScrollableScrollPhysics(),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget> [
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
-
                   TabBar(
-
                     controller: controller,
-                    labelColor: kPrimaryColor,
+                    labelColor: Color(0xFF1777F2),
                     indicatorColor: kPrimaryColor,
                     indicatorSize: TabBarIndicatorSize.label,
                     unselectedLabelColor: Colors.grey,
-                   isScrollable: true,
-
-                    tabs: choices.map <Widget>((Choice chioce) {
-                      return Tab (
-                        text: chioce.title,
-                        icon: Icon(chioce.icon),
-                      );
-                    }
-
-                    ).toList(),
+                    tabs: [
+                      Tab(text: "My Web Locker",),
+                      Tab(text: "Device",),
+                    ],
                   ),
                 ),
                 pinned: true,
-              //  floating: true,
               ),
             ];
           },
-
-          body: TabBarView(
-            controller: controller,
-            children: choices.map((Choice choice ) {
-              return ChoicePage(
-                choice: choice,
-                staticFiles: _staticFiles,
-              );
-
-            }).toList(),
-          ),
-         /*   body: TabBarView(
+            body: TabBarView(
               controller: controller,
               children: [
                 //My web locker
@@ -140,32 +113,10 @@ class _MyDriveScreenPageState extends State<MyDriveScreenPage> with SingleTicker
 
 
               ],
-            )*/
+            )
         ),
       ),
     );
-  }
-
-  Future<List<Files>> getFiles(String fake_base_api, String fake_files)async {
-
-    var response = await BaseClient().get(fake_base_api, fake_files);
-    print(" File response: $response");
-    // If the call to the server was successful, parse the JSON
-    List<dynamic> values = new List<dynamic>();
-    if(response == null) return null;
-    values = json.decode(response);
-    _staticFiles.addAll(filesFromJson(response));
-  /*  if (values.length > 0) {
-      for (int i = 0; i < values.length; i++) {
-        if (values[i] != null) {
-          Map<String, dynamic> map = values[i];
-          _staticFiles.add(Files.fromJson(map));
-          debugPrint(
-              'Files ----${map['fileName']}---${map['fileType']}');
-        }
-      }
-    }*/
-    return _staticFiles;
   }
 
 

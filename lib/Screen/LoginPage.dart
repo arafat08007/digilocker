@@ -110,10 +110,7 @@ class LoginPage extends StatelessWidget {
                           print("Login button pressed" + error.toString());
 
                           if (error != "") {
-                            showSnackMessage(
-                                context,
-                                "Login credential mismatch! Try again.",
-                                _globalscaffoldKey, 'red');
+                            showSnackMessage(context, "Login credential mismatch! Try again.", _globalscaffoldKey, 'red');
                             //Get.defaultDialog(
                             //  title: "Oop!", middleText: error);
                           } else {
@@ -127,10 +124,7 @@ class LoginPage extends StatelessWidget {
                         }
                       }
                       catch(e){
-                        print("Login button pressed Error" + e.toString());
-                        showSnackMessage(
-                            context, "Login credential mismatch! Try again.",
-                            _globalscaffoldKey, 'red');
+                        print("Login button pressed Error" + e.toString());showSnackMessage(context, "Login credential mismatch! Try again.", _globalscaffoldKey, 'red');
                       }
                     }
                     ,
@@ -147,7 +141,7 @@ class LoginPage extends StatelessWidget {
                     },*/
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                  AlreadyHaveAnAccountCheck(
+                /*  AlreadyHaveAnAccountCheck(
                     press: () {
                       Navigator.pushAndRemoveUntil(
                           context,
@@ -167,7 +161,7 @@ class LoginPage extends StatelessWidget {
                               (Route route) => false);
 
                     },
-                  ),
+                  ),*/
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                   Expanded(child: Image.asset('assets/govt_logo.png')),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),

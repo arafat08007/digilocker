@@ -224,6 +224,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                 prefs= await SharedPreferences.getInstance();
                 prefs.remove('userid');
                 prefs.remove('id');
+                prefs.remove('mylockertoken');
+                prefs.remove('mylokcerid');
                // Get.offAll(LoginPage());
                   Navigator.pushAndRemoveUntil(
                     context,
